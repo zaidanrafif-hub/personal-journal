@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Personal Journal</title>
+<meta name="theme-color" content="#0B3D91">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📒</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- LOGIN -->
+<main id="auth" class="auth">
+  <div class="auth-card">
+    <div class="logo">Personal<br>Journal</div>
+    <p class="muted">Catatan keuangan pribadi. Masuk atau buat akun baru.</p>
+    <div class="tabs" role="tablist">
+      <button class="tab on" data-mode="login">Masuk</button>
+      <button class="tab" data-mode="register">Buat akun</button>
+    </div>
+    <label>Nama akun<input id="u" autocomplete="username" placeholder="mis. andi"></label>
+    <label>Kata sandi<input id="p" type="password" autocomplete="current-password" placeholder="min. 4 karakter"></label>
+    <p id="authErr" class="err" role="alert"></p>
+    <button id="authBtn" class="btn primary wide">Masuk</button>
+  </div>
+</main>
+
+<!-- APP -->
+<div id="app" hidden>
+  <header class="top">
+    <div class="logo sm">Personal Journal</div>
+    <nav>
+      <a href="#dompet">Dompet</a><a href="#anggaran">Anggaran</a><a href="#laporan">Laporan</a>
+      <a href="#investasi">Investasi</a><a href="#catatan">Catatan</a><a href="#evaluasi">Evaluasi</a>
+    </nav>
+    <div class="who"><span id="whoName"></span><button class="btn ghost" id="logout">Keluar</button></div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <p class="hero-l">Total semua uang kamu</p>
+      <h1 id="total">Rp0</h1>
+      <div class="split">
+        <span><i class="dot y"></i>Uang Kartal (tunai) <b id="kartal">Rp0</b></span>
+        <span><i class="dot b"></i>Uang Giral (online) <b id="giral">Rp0</b></span>
+        <span><i class="dot g"></i>Investasi <b id="invTotal">Rp0</b></span>
+      </div>
+    </div>
+    <button class="btn quick" id="quick">+ Catat transaksi</button>
+  </section>
+
+  <main class="grid">
+    <section id="dompet" class="card">
+      <div class="card-h"><h2>Dompet</h2><button class="btn ghost" id="addWallet">+ Dompet</button></div>
+      <div id="wallets" class="wallets"></div>
+    </section>
+
+    <section id="anggaran" class="card">
+      <div class="card-h"><h2>Rencana anggaran bulan ini</h2><button class="btn ghost" id="addBudget">+ Batas</button></div>
+      <div id="budgets"></div>
+    </section>
+
+    <section id="laporan" class="card">
+      <div class="card-h"><h2>Ke mana uang keluar</h2><span class="muted" id="monthLbl"></span></div>
+      <div id="pie" class="pie-wrap"></div>
+    </section>
+
+    <section id="investasi" class="card">
+      <div class="card-h"><h2>Sisa uang jadi investasi</h2><button class="btn ghost" id="addInv">+ Alokasikan</button></div>
+      <div id="inv" class="inv"></div>
+    </section>
+
+    <section id="catatan" class="card full">
+      <div class="card-h"><h2>Catatan transaksi</h2>
+        <select id="filterMonth"></select></div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Tanggal</th><th>Hari</th><th>Keterangan</th><th>Dompet</th><th class="r">Jumlah</th><th>Status</th><th></th></tr></thead>
+          <tbody id="txBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="evaluasi" class="card full">
+      <div class="card-h"><h2>Evaluasi: sebab, akibat, dan yang perlu direlakan</h2><span class="muted" id="evalLbl"></span></div>
+      <div id="evalBox" class="eval"></div>
+    </section>
+  </main>
+  <footer class="foot">Data tersimpan di browser perangkat ini.</footer>
+</div>
+
+<!-- MODALS -->
+<dialog id="mTx"><form method="dialog" class="mf" id="fTx">
+  <h3>Catat transaksi</h3>
+  <div class="seg"><label><input type="radio" name="type" value="out" checked><span>Pengeluaran</span></label><label><input type="radio" name="type" value="in"><span>Pemasukan</span></label></div>
+  <label>Nominal (Rp)<input name="amount" type="number" min="1" inputmode="numeric" required></label>
+  <label>Kategori<select name="cat"></select></label>
+  <label>Dompet<select name="wallet"></select></label>
+  <label>Tanggal<input name="date" type="date" required></label>
+  <label>Catatan kecil<input name="note" maxlength="80" placeholder="mis. kopi susu sama teman"></label>
+  <div class="mb"><button type="button" class="btn ghost" data-close>Batal</button><button class="btn primary">Simpan</button></div>
+</form></dialog>
+
+<dialog id="mWallet"><form method="dialog" class="mf" id="fWallet">
+  <h3>Tambah dompet</h3>
+  <label>Nama<input name="name" required placeholder="mis. Jago Syariah, GoPay"></label>
+  <label>Jenis<select name="type"><option value="giral">Uang Giral (rekening / e-wallet)</option><option value="kartal">Uang Kartal (tunai)</option></select></label>
+  <label>Saldo awal (Rp)<input name="balance" type="number" min="0" value="0"></label>
+  <div class="mb"><button type="button" class="btn ghost" data-close>Batal</button><button class="btn primary">Simpan</button></div>
+</form></dialog>
+
+<dialog id="mBudget"><form method="dialog" class="mf" id="fBudget">
+  <h3>Batas pengeluaran</h3>
+  <label>Kategori<select name="cat"></select></label>
+  <label>Maksimal per bulan (Rp)<input name="limit" type="number" min="1" required></label>
+  <div class="mb"><button type="button" class="btn ghost" data-close>Batal</button><button class="btn primary">Simpan</button></div>
+</form></dialog>
+
+<dialog id="mInv"><form method="dialog" class="mf" id="fInv">
+  <h3>Alokasikan ke investasi</h3>
+  <label>Instrumen<select name="k"><option value="dana">Dana darurat</option><option value="emas">Emas</option><option value="obligasi">Obligasi</option><option value="saham">Saham</option></select></label>
+  <label>Dari dompet<select name="wallet"></select></label>
+  <label>Nominal (Rp)<input name="amount" type="number" min="1" required></label>
+  <div class="mb"><button type="button" class="btn ghost" data-close>Batal</button><button class="btn primary">Pindahkan</button></div>
+</form></dialog>
+
+<div id="toast" class="toast" role="status"></div>
+<script src="app.js"></script>
+</body>
+</html>
