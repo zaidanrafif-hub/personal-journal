@@ -1,6 +1,7 @@
 'use strict';
 const $ = (s, r = document) => r.querySelector(s);
-const rp = n => 'Rp' + Math.round(n).toLocaleString('id-ID');
+let HIDE = localStorage.getItem('pj_hide') === '1';
+const rp = n => HIDE ? 'Rp ••••••' : 'Rp' + Math.round(n).toLocaleString('id-ID');
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid = () => Math.random().toString(36).slice(2, 9);
 const today = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
@@ -13,7 +14,7 @@ const CAT_OUT = ['Makan', 'Kopi/Kafe', 'Transport', 'Belanja', 'Tagihan', 'Hibur
 const CAT_IN = ['Gaji', 'Bonus', 'Usaha', 'Hadiah', 'Lainnya'];
 const WANT = ['Kopi/Kafe', 'Hiburan', 'Belanja', 'Lainnya']; // kategori keinginan (bisa direlakan)
 const INV = { dana: 'Dana darurat', emas: 'Emas', obligasi: 'Obligasi', saham: 'Saham' };
-const COLORS = ['#0B3D91', '#14935B', '#FFC93C', '#1E63D6', '#3FD18F', '#E8A800', '#6FA3FF', '#0E6B43', '#9DB7E8'];
+const COLORS = [const COLORS = ['#0B3D91', '#E63946', '#1E63D6', '#FF8A91', '#6FA3FF', '#8F1D28', '#9DB7E8', '#B3202D', '#C9D8F5'];];
 
 /* ---------- penyimpanan ---------- */
 let user = null, D = null;
@@ -57,7 +58,7 @@ $('#logout').onclick = () => { sessionStorage.removeItem('pj_session'); location
 function start(u) {
   user = u; D = load();
   $('#auth').hidden = true; $('#app').hidden = false; $('#whoName').textContent = u;
-  fillMonths(); render();
+  eyeLbl(); fillMonths(); render();
 }
 
 /* ---------- helper data ---------- */
@@ -77,7 +78,7 @@ function render() {
   const kartal = D.wallets.filter(w => w.type === 'kartal').reduce((a, w) => a + w.balance, 0);
   const giral = D.wallets.filter(w => w.type === 'giral').reduce((a, w) => a + w.balance, 0);
   const inv = Object.values(D.inv).reduce((a, b) => a + b, 0);
-  $('#total').textContent = rp(kartal + giral);
+  countTo($('#total'), kartal + giral);
   $('#kartal').textContent = rp(kartal); $('#giral').textContent = rp(giral); $('#invTotal').textContent = rp(inv);
 
   $('#wallets').innerHTML = D.wallets.map(w => `<div class="wallet ${w.type}"><button class="x" data-del-w="${w.id}" aria-label="Hapus ${esc(w.name)}">×</button>
@@ -125,10 +126,10 @@ function render() {
     return `<tr><td>${dateFmt(t.date)}</td><td>${dayName(t.date)}</td><td>${esc(t.cat)}${t.note ? ' · ' + esc(t.note) : ''}</td><td>${esc(w ? w.name : t.walletName || '-')}</td>
       <td class="${t.type}">${t.type === 'in' ? '+' : '−'}${rp(t.amount)}</td>
       <td><span class="badge ${st}">${st === 'kartal' ? 'Uang Kartal' : 'Uang Giral'}</span></td>
-      <td><button class="x" style="position:static" data-del-t="${t.id}" aria-label="Hapus transaksi">×</button></td></tr>`;
+      <td style="white-space:nowrap"><button class="x" style="position:static" data-edit-t="${t.id}" aria-label="Ubah transaksi">✎</button><button class="x" style="position:static" data-del-t="${t.id}" aria-label="Hapus transaksi">×</button></td></tr>`;
   }).join('') : '<tr><td colspan="7" class="empty">Belum ada transaksi di bulan ini.</td></tr>';
 
-  evaluate(m, byCat);
+  evaluate(m, byCat); renderTrend();
 }
 
 /* ---------- evaluasi sebab-akibat ---------- */
@@ -191,11 +192,13 @@ document.querySelectorAll('#fTx [name=type]').forEach(r => r.onchange = setCats)
 
 $('#quick').onclick = () => {
   if (!D.wallets.length) return toast('Tambah dompet dulu.');
+  editId = null;
   const f = $('#fTx'); f.reset(); setCats(); fill(f.wallet, walletOpts()); f.date.value = today(); open('#mTx'); f.amount.focus();
 };
 $('#fTx').onsubmit = e => {
   const f = e.target, w = wById(f.wallet.value), amt = +f.amount.value, type = f.type.value;
   if (!w || amt <= 0) return;
+  if (editId) { const o = D.tx.find(x => x.id === editId), ow = o && wById(o.wallet); if (ow) ow.balance += o.type === 'in' ? -o.amount : o.amount; D.tx = D.tx.filter(x => x.id !== editId); editId = null; }
   w.balance += type === 'in' ? amt : -amt;
   D.tx.push({ id: uid(), date: f.date.value, type, wallet: w.id, walletName: w.name, status: w.type, cat: f.cat.value, amount: amt, note: f.note.value.trim() });
   save(); fillMonths(); $('#filterMonth').value = monthOf(f.date.value); render(); toast('Transaksi tersimpan');
@@ -222,5 +225,58 @@ document.addEventListener('click', e => {
     if (w) w.balance += x.type === 'in' ? -x.amount : x.amount; D.tx = D.tx.filter(y => y.id !== x.id); fillMonths(); }
   save(); render();
 });
+
+/* ---------- v2: sembunyikan angka, animasi, tren, ekspor, transfer, ubah ---------- */
+let lastTot = 0, editId = null;
+function countTo(el, v) {
+  const s = lastTot, t0 = performance.now(); lastTot = v;
+  if (HIDE || s === v || matchMedia('(prefers-reduced-motion:reduce)').matches) { el.textContent = rp(v); return; }
+  (function f(t) { const k = Math.min((t - t0) / 700, 1); el.textContent = rp(s + (v - s) * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(f); })(t0);
+}
+function eyeLbl() { $('#eye').textContent = HIDE ? 'Tampilkan angka' : 'Sembunyikan angka'; }
+$('#eye').onclick = () => { HIDE = !HIDE; localStorage.setItem('pj_hide', HIDE ? '1' : '0'); eyeLbl(); render(); };
+
+function renderTrend() {
+  const now = new Date(), ms = [];
+  for (let i = 5; i >= 0; i--) { const x = new Date(now.getFullYear(), now.getMonth() - i, 1); ms.push(x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0')); }
+  const sum = (m, ty) => D.tx.filter(t => monthOf(t.date) === m && t.type === ty).reduce((a, t) => a + t.amount, 0);
+  const data = ms.map(m => ({ m, i: sum(m, 'in'), o: sum(m, 'out') }));
+  const mx = Math.max(1, ...data.flatMap(x => [x.i, x.o]));
+  const bars = data.map((x, k) => {
+    const bx = 20 + k * 96, h1 = x.i / mx * 150, h2 = x.o / mx * 150;
+    return `<rect class="b1" x="${bx}" y="${170 - h1}" width="34" height="${h1}" rx="6" style="--d:${k * 80}ms"><title>Masuk ${rp(x.i)}</title></rect>
+      <rect class="b2" x="${bx + 38}" y="${170 - h2}" width="34" height="${h2}" rx="6" style="--d:${k * 80 + 40}ms"><title>Keluar ${rp(x.o)}</title></rect>
+      <text x="${bx + 36}" y="192" text-anchor="middle" font-size="12" fill="var(--muted)">${new Date(x.m + '-01T00:00').toLocaleDateString('id-ID', { month: 'short' })}</text>`;
+  }).join('');
+  $('#trend').innerHTML = `<svg viewBox="0 0 600 205" class="trend" role="img" aria-label="Tren pemasukan dan pengeluaran 6 bulan"><line x1="10" x2="590" y1="170" y2="170" stroke="var(--line)"/>${bars}</svg>
+    <p class="muted"><i class="dot g"></i> Masuk &nbsp;&nbsp; <i class="dot y"></i> Keluar</p>`;
+}
+
+$('#exp').onclick = () => {
+  const head = ['Tanggal', 'Hari', 'Jenis', 'Kategori', 'Catatan', 'Dompet', 'Status', 'Jumlah'];
+  const rows = D.tx.slice().sort((a, b) => a.date.localeCompare(b.date)).map(t => [t.date, dayName(t.date), t.type === 'in' ? 'Pemasukan' : 'Pengeluaran', t.cat, t.note, t.walletName, t.status === 'kartal' ? 'Uang Kartal' : 'Uang Giral', t.amount]);
+  const csv = '\ufeff' + [head, ...rows].map(r => r.map(c => '"' + String(c ?? '').replace(/"/g, '""') + '"').join(',')).join('\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = 'personal-journal.csv'; a.click();
+};
+$('#prt').onclick = () => print();
+
+$('#addTf').onclick = () => {
+  if (D.wallets.length < 2) return toast('Perlu minimal 2 dompet.');
+  const f = $('#fTf'); f.reset(); fill(f.from, walletOpts()); fill(f.to, walletOpts()); f.to.selectedIndex = 1; open('#mTf');
+};
+$('#fTf').onsubmit = e => {
+  const f = e.target, a = wById(f.from.value), b = wById(f.to.value), n = +f.amount.value;
+  if (!a || !b || a === b || n <= 0) { e.preventDefault(); return toast('Pilih dua dompet yang berbeda.'); }
+  if (n > a.balance) { e.preventDefault(); return toast('Saldo dompet asal tidak cukup'); }
+  a.balance -= n; b.balance += n; save(); render(); toast('Transfer berhasil');
+};
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-edit-t]'); if (!b) return;
+  const t = D.tx.find(x => x.id === b.dataset.editT); if (!t) return;
+  editId = t.id; const f = $('#fTx'); f.reset(); f.type.value = t.type; setCats(); fill(f.wallet, walletOpts());
+  f.cat.value = t.cat; f.wallet.value = t.wallet; f.amount.value = t.amount; f.date.value = t.date; f.note.value = t.note; open('#mTx');
+});
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 
 const s = sessionStorage.getItem('pj_session'); if (s && users()[s]) start(s);

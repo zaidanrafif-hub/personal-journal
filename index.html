@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Personal Journal</title>
 <meta name="theme-color" content="#0B3D91">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📒</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,14 +37,14 @@
     <div class="logo sm">Personal Journal</div>
     <nav>
       <a href="#dompet">Dompet</a><a href="#anggaran">Anggaran</a><a href="#laporan">Laporan</a>
-      <a href="#investasi">Investasi</a><a href="#catatan">Catatan</a><a href="#evaluasi">Evaluasi</a>
+      <a href="#investasi">Investasi</a><a href="#tren">Tren</a><a href="#catatan">Catatan</a><a href="#evaluasi">Evaluasi</a>
     </nav>
     <div class="who"><span id="whoName"></span><button class="btn ghost" id="logout">Keluar</button></div>
   </header>
 
   <section class="hero">
     <div>
-      <p class="hero-l">Total semua uang kamu</p>
+      <div class="hero-row"><p class="hero-l">Total semua uang kamu</p><button class="btn eye" id="eye">Sembunyikan angka</button></div>
       <h1 id="total">Rp0</h1>
       <div class="split">
         <span><i class="dot y"></i>Uang Kartal (tunai) <b id="kartal">Rp0</b></span>
@@ -55,7 +57,7 @@
 
   <main class="grid">
     <section id="dompet" class="card">
-      <div class="card-h"><h2>Dompet</h2><button class="btn ghost" id="addWallet">+ Dompet</button></div>
+      <div class="card-h"><h2>Dompet</h2><span class="acts"><button class="btn ghost" id="addTf">Transfer</button><button class="btn ghost" id="addWallet">+ Dompet</button></span></div>
       <div id="wallets" class="wallets"></div>
     </section>
 
@@ -74,9 +76,14 @@
       <div id="inv" class="inv"></div>
     </section>
 
+    <section id="tren" class="card full">
+      <div class="card-h"><h2>Tren 6 bulan terakhir</h2></div>
+      <div id="trend"></div>
+    </section>
+
     <section id="catatan" class="card full">
       <div class="card-h"><h2>Catatan transaksi</h2>
-        <select id="filterMonth"></select></div>
+        <span class="acts"><select id="filterMonth"></select><button class="btn ghost" id="exp">Ekspor Excel (CSV)</button><button class="btn ghost" id="prt">Cetak / PDF</button></span></div>
       <div class="tbl-wrap">
         <table>
           <thead><tr><th>Tanggal</th><th>Hari</th><th>Keterangan</th><th>Dompet</th><th class="r">Jumlah</th><th>Status</th><th></th></tr></thead>
@@ -124,6 +131,14 @@
   <h3>Alokasikan ke investasi</h3>
   <label>Instrumen<select name="k"><option value="dana">Dana darurat</option><option value="emas">Emas</option><option value="obligasi">Obligasi</option><option value="saham">Saham</option></select></label>
   <label>Dari dompet<select name="wallet"></select></label>
+  <label>Nominal (Rp)<input name="amount" type="number" min="1" required></label>
+  <div class="mb"><button type="button" class="btn ghost" data-close>Batal</button><button class="btn primary">Pindahkan</button></div>
+</form></dialog>
+
+<dialog id="mTf"><form method="dialog" class="mf" id="fTf">
+  <h3>Transfer antar dompet</h3>
+  <label>Dari<select name="from"></select></label>
+  <label>Ke<select name="to"></select></label>
   <label>Nominal (Rp)<input name="amount" type="number" min="1" required></label>
   <div class="mb"><button type="button" class="btn ghost" data-close>Batal</button><button class="btn primary">Pindahkan</button></div>
 </form></dialog>
