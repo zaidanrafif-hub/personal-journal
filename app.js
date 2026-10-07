@@ -14,7 +14,7 @@ const CAT_OUT = ['Makan', 'Kopi/Kafe', 'Transport', 'Belanja', 'Tagihan', 'Hibur
 const CAT_IN = ['Gaji', 'Bonus', 'Usaha', 'Hadiah', 'Lainnya'];
 const WANT = ['Kopi/Kafe', 'Hiburan', 'Belanja', 'Lainnya']; // kategori keinginan (bisa direlakan)
 const INV = { dana: 'Dana darurat', emas: 'Emas', obligasi: 'Obligasi', saham: 'Saham' };
-const COLORS = ['#0B3D91', '#14935B', '#FFC93C', '#1E63D6', '#3FD18F', '#E8A800', '#6FA3FF', '#0E6B43', '#9DB7E8'];
+const COLORS = ['#6200EE', '#018786', '#BB86FC', '#3700B3', '#03DAC6', '#7C4DFF', '#26A69A', '#B39DDB', '#512DA8'];
 
 /* ---------- penyimpanan ---------- */
 let user = null, D = null;
