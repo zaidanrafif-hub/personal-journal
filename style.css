@@ -133,3 +133,40 @@ dialog::backdrop{background:rgba(8,20,55,.55)}
 .toast.on{transform:translate(-50%,0)}
 .foot{text-align:center;color:var(--muted);font-size:.8rem;padding:0 0 28px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* ===== v2: layout, animasi, tren, cetak ===== */
+.hero{position:relative;overflow:hidden}
+.hero>*{position:relative;z-index:1}
+.hero::before,.hero::after{content:"";position:absolute;border-radius:50%;z-index:0;animation:float 9s ease-in-out infinite}
+.hero::before{width:260px;height:260px;right:-60px;top:-90px;background:var(--green);opacity:.55}
+.hero::after{width:150px;height:150px;right:200px;bottom:-70px;background:var(--yellow);opacity:.35;animation-delay:-4s}
+@keyframes float{50%{transform:translate(-14px,18px) scale(1.06)}}
+.hero-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.btn.eye{background:rgba(255,255,255,.16);color:#fff;padding:6px 12px;font-size:.8rem}
+.btn.eye:hover{background:rgba(255,255,255,.28)}
+.acts{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.card{border-radius:22px;box-shadow:0 1px 0 var(--line),0 14px 30px -22px rgba(11,61,145,.45);animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+.grid>.card:nth-child(2){animation-delay:.08s}.grid>.card:nth-child(3){animation-delay:.16s}
+.grid>.card:nth-child(4){animation-delay:.24s}.grid>.card:nth-child(5){animation-delay:.32s}
+.grid>.card:nth-child(n+6){animation-delay:.4s}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}}
+.wallet{transition:transform .2s,box-shadow .2s}
+.wallet:hover{transform:translateY(-3px) rotate(-.6deg);box-shadow:0 10px 20px -12px rgba(11,61,145,.5)}
+.btn.quick{animation:pulse 2.8s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.04)}}
+.bar i{animation:fill 1s cubic-bezier(.2,.8,.2,1) both;transform-origin:left}
+@keyframes fill{from{transform:scaleX(0)}}
+.pie-wrap svg path,.pie-wrap svg circle:first-child{transform-origin:100px 100px;animation:spin .9s cubic-bezier(.2,.8,.2,1) both}
+@keyframes spin{from{opacity:0;transform:rotate(-40deg) scale(.85)}}
+.trend{width:100%;max-width:640px;height:auto}
+.trend rect{transform-box:fill-box;transform-origin:bottom;animation:grow .8s var(--d,0ms) cubic-bezier(.2,.8,.2,1) both}
+.trend .b1{fill:var(--green)}.trend .b2{fill:var(--yellow)}
+@keyframes grow{from{transform:scaleY(0)}}
+tbody tr{transition:background .15s}tbody tr:hover{background:var(--blue-soft)}
+.x:hover{color:var(--blue-2)}
+@media (prefers-reduced-motion:reduce){*,::before,::after{animation:none!important}}
+@media print{
+  .top,.hero,.card:not(#catatan):not(#evaluasi),.acts,.foot,.x,dialog,.toast{display:none!important}
+  body{background:#fff;color:#000}.grid{display:block;padding:0}.card{box-shadow:none;animation:none;break-inside:avoid;border:0}
+  td:last-child,th:last-child{display:none}
+}
