@@ -20,17 +20,10 @@ const COLORS = ['#6200EE', '#018786', '#BB86FC', '#3700B3', '#03DAC6', '#7C4DFF'
 let user = null, D = null;
 const users = () => JSON.parse(localStorage.getItem('pj_users') || '{}');
 const sha = async t => [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t)))].map(b => b.toString(16).padStart(2, '0')).join('');
-const load = () => JSON.parse(localStorage.getItem('pj_data_' + user) || 'null') || {
-  wallets: [
-    { id: uid(), name: 'Kas', type: 'kartal', balance: 0 },
-    { id: uid(), name: 'Bank Digital', type: 'giral', balance: 0 },
-    { id: uid(), name: 'Jago Syariah', type: 'giral', balance: 0 },
-    { id: uid(), name: 'GoPay', type: 'giral', balance: 0 },
-    { id: uid(), name: 'ShopeePay', type: 'giral', balance: 0 }],
-  tx: [], budgets: {}, inv: { dana: 0, emas: 0, obligasi: 0, saham: 0 }
-};
-const save = () => localStorage.setItem('pj_data_' + user, JSON.stringify(D));
+const load = () => Store.load(user);
+const save = () => Store.save(user, D);
 const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('on'); setTimeout(() => t.classList.remove('on'), 2200); };
+Store.onWarn = m => toast(m);
 
 /* ---------- login ---------- */
 let mode = 'login';
@@ -79,9 +72,7 @@ function render() {
   const m = curMonth();
   const kartal = D.wallets.filter(w => w.type === 'kartal').reduce((a, w) => a + w.balance, 0);
   const giral = D.wallets.filter(w => w.type === 'giral').reduce((a, w) => a + w.balance, 0);
-  const inv = Object.values(D.inv).reduce((a, b) => a + b, 0);
   countTo($('#total'), kartal + giral);
-  $('#kartal').textContent = rp(kartal); $('#giral').textContent = rp(giral); $('#invTotal').textContent = rp(inv);
 
   $('#wallets').innerHTML = D.wallets.map(w => `<div class="wallet ${w.type}"><button class="x" data-del-w="${w.id}" aria-label="Hapus ${esc(w.name)}">×</button>
     <small>${esc(w.name)} · ${w.type === 'kartal' ? 'Kartal' : 'Giral'}</small><b>${rp(w.balance)}</b></div>`).join('') || '<p class="empty">Belum ada dompet.</p>';
@@ -131,7 +122,7 @@ function render() {
       <td style="white-space:nowrap"><button class="x" style="position:static" data-edit-t="${t.id}" aria-label="Ubah transaksi">✎</button><button class="x" style="position:static" data-del-t="${t.id}" aria-label="Hapus transaksi">×</button></td></tr>`;
   }).join('') : '<tr><td colspan="7" class="empty">Belum ada transaksi di bulan ini.</td></tr>';
 
-  evaluate(m, byCat); renderTrend();
+  evaluate(m, byCat);
 }
 
 /* ---------- evaluasi sebab-akibat ---------- */
@@ -192,10 +183,10 @@ const walletOpts = () => D.wallets.map(w => [w.id, `${w.name} (${rp(w.balance)})
 function setCats() { const t = $('#fTx').type.value; fill($('#fTx').cat, (t === 'out' ? CAT_OUT : CAT_IN).map(c => [c, c])); }
 document.querySelectorAll('#fTx [name=type]').forEach(r => r.onchange = setCats);
 
-$('#quick').onclick = () => {
+const openTx = (type = 'out') => {
   if (!D.wallets.length) return toast('Tambah dompet dulu.');
   editId = null;
-  const f = $('#fTx'); f.reset(); setCats(); fill(f.wallet, walletOpts()); f.date.value = today(); open('#mTx'); f.amount.focus();
+  const f = $('#fTx'); f.reset(); f.querySelector('[name=type][value=' + type + ']').checked = true; setCats(); fill(f.wallet, walletOpts()); f.date.value = today(); open('#mTx'); f.amount.focus();
 };
 $('#fTx').onsubmit = e => {
   const f = e.target, w = wById(f.wallet.value), amt = +f.amount.value, type = f.type.value;
@@ -235,24 +226,12 @@ function countTo(el, v) {
   if (HIDE || s === v || matchMedia('(prefers-reduced-motion:reduce)').matches) { el.textContent = rp(v); return; }
   (function f(t) { const k = Math.min((t - t0) / 700, 1); el.textContent = rp(s + (v - s) * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(f); })(t0);
 }
-function eyeLbl() { $('#eye').textContent = HIDE ? 'Tampilkan angka' : 'Sembunyikan angka'; }
-$('#eye').onclick = () => { HIDE = !HIDE; localStorage.setItem('pj_hide', HIDE ? '1' : '0'); eyeLbl(); render(); };
-
-function renderTrend() {
-  const now = new Date(), ms = [];
-  for (let i = 5; i >= 0; i--) { const x = new Date(now.getFullYear(), now.getMonth() - i, 1); ms.push(x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0')); }
-  const sum = (m, ty) => D.tx.filter(t => monthOf(t.date) === m && t.type === ty).reduce((a, t) => a + t.amount, 0);
-  const data = ms.map(m => ({ m, i: sum(m, 'in'), o: sum(m, 'out') }));
-  const mx = Math.max(1, ...data.flatMap(x => [x.i, x.o]));
-  const bars = data.map((x, k) => {
-    const bx = 20 + k * 96, h1 = x.i / mx * 150, h2 = x.o / mx * 150;
-    return `<rect class="b1" x="${bx}" y="${170 - h1}" width="34" height="${h1}" rx="6" style="--d:${k * 80}ms"><title>Masuk ${rp(x.i)}</title></rect>
-      <rect class="b2" x="${bx + 38}" y="${170 - h2}" width="34" height="${h2}" rx="6" style="--d:${k * 80 + 40}ms"><title>Keluar ${rp(x.o)}</title></rect>
-      <text x="${bx + 36}" y="192" text-anchor="middle" font-size="12" fill="var(--muted)">${new Date(x.m + '-01T00:00').toLocaleDateString('id-ID', { month: 'short' })}</text>`;
-  }).join('');
-  $('#trend').innerHTML = `<svg viewBox="0 0 600 205" class="trend" role="img" aria-label="Tren pemasukan dan pengeluaran 6 bulan"><line x1="10" x2="590" y1="170" y2="170" stroke="var(--line)"/>${bars}</svg>
-    <p class="muted"><i class="dot g"></i> Masuk &nbsp;&nbsp; <i class="dot y"></i> Keluar</p>`;
+function eyeLbl() {
+  const u = $('#eyeUse'), t = HIDE ? 'Tampilkan angka' : 'Sembunyikan angka';
+  if (u) u.setAttribute('href', HIDE ? '#i-eye-off' : '#i-eye');
+  $('#eye').setAttribute('aria-label', t); $('#eye').title = t;
 }
+$('#eye').onclick = () => { HIDE = !HIDE; localStorage.setItem('pj_hide', HIDE ? '1' : '0'); eyeLbl(); render(); };
 
 $('#exp').onclick = () => {
   const head = ['Tanggal', 'Hari', 'Jenis', 'Kategori', 'Catatan', 'Dompet', 'Status', 'Jumlah'];

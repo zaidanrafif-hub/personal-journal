@@ -77,7 +77,12 @@ const Fit = (() => {
     }
     $('#zk').innerHTML = h + '<p class="muted">Perkiraan sederhana. Untuk ketentuan lengkap, tanyakan ke lembaga zakat atau ustaz.</p>';
   }
-  const renderAll = () => { renderGoals(); renderRecs(); renderJournal(); renderZakat(); };
+  function renderAutoBak() {
+    const list = Store.list(sessionStorage.getItem('pj_session'));
+    $('#autoBak').innerHTML = list.length ? '<p class="muted" style="margin:16px 0 6px">Cadangan otomatis di perangkat ini. Hanya untuk berjaga jika data bermasalah, bukan pengganti file cadangan.</p>' +
+      list.map(b => `<div class="bud-t" style="padding:7px 0;border-bottom:1px dashed var(--line)"><span>${esc(b.label)}</span><span>${b.kb} KB · <a href="#" data-restore="${esc(b.key)}">pulihkan</a></span></div>`).join('') : '';
+  }
+  const renderAll = () => { renderGoals(); renderRecs(); renderJournal(); renderZakat(); renderAutoBak(); };
 
   /* ----- target tabungan ----- */
   let depId = null;
@@ -116,8 +121,13 @@ const Fit = (() => {
 
   /* ----- klik tautan di kartu ----- */
   document.addEventListener('click', e => {
-    const a = e.target.closest('[data-gdep],[data-gdel],[data-rdel],[data-rpay],[data-jdel]'); if (!a) return;
+    const a = e.target.closest('[data-gdep],[data-gdel],[data-rdel],[data-rpay],[data-jdel],[data-restore]'); if (!a) return;
     e.preventDefault(); const d = a.dataset;
+    if (d.restore) {
+      if (!confirm('Pulihkan data dari cadangan ini? Data saat ini akan diganti (salinannya tetap disimpan).')) return;
+      try { D = Store.restore(sessionStorage.getItem('pj_session'), d.restore); location.reload(); } catch (x) { toast('Gagal memulihkan: ' + x.message); }
+      return;
+    }
     if (d.gdep) { depId = d.gdep; const f = $('#fGoalDep'); f.reset(); fill(f.elements.wallet, walletOpts()); return open('#mGoalDep'); }
     if (d.gdel) { const g = D.goals.find(x => x.id === d.gdel), w0 = D.wallets[0];
       if (!confirm(`Hapus target "${g.name}"?` + (g.saved && w0 ? ` Uang tersimpan ${rp(g.saved)} dikembalikan ke dompet "${w0.name}".` : ''))) return;
@@ -131,7 +141,7 @@ const Fit = (() => {
   /* ----- cadangan ----- */
   $('#bkExp').onclick = () => {
     const u = sessionStorage.getItem('pj_session');
-    const blob = new Blob([JSON.stringify({ app: 'personal-journal', v: 1, user: u, date: today(), data: D }, null, 1)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify({ app: 'personal-journal', v: 1, schema: D.v, user: u, date: today(), data: D }, null, 1)], { type: 'application/json' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'personal-journal-' + u + '-' + today() + '.json'; a.click();
     toast('Cadangan diunduh. Simpan file ini di tempat aman.');
   };
@@ -143,7 +153,7 @@ const Fit = (() => {
         const x = JSON.parse(rd.result);
         if (!x.data || !Array.isArray(x.data.wallets) || !Array.isArray(x.data.tx)) throw new Error('bukan file cadangan Personal Journal');
         if (!confirm('Pulihkan cadangan tanggal ' + (x.date || '?') + '? Data saat ini akan DIGANTI.')) return;
-        D = x.data; ensure(); save(); location.reload();
+        const u = sessionStorage.getItem('pj_session'); Store.snapshot(u, 'restore'); D = Store.migrate(x.data, u, null); Store.unlock(); ensure(); save(); location.reload();
       } catch (err) { toast('Gagal memulihkan: ' + err.message); }
       e.target.value = '';
     };
@@ -231,5 +241,5 @@ const Fit = (() => {
   const baseRender = render;
   render = function () { ensure(); runRec(); baseRender(); renderAll(); };
   if (D) render();
-  return { importCsv, parseNum, parseDate };
+  return { importCsv, parseNum, parseDate, dueSoon: () => D.rec.filter(r => !r.auto && dayDiff(dueDate(r)) <= 7).map(r => ({ r, d: dayDiff(dueDate(r)) })) };
 })();

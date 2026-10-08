@@ -67,13 +67,13 @@ const Sec = (() => {
 
   /* angka tertutup otomatis saat masuk (bisa dibuka lewat tombol mata) */
   function onLogin() {
-    if (localStorage.getItem('pj_autohide') !== '0') { HIDE = true; localStorage.setItem('pj_hide', '1'); }
+    if (localStorage.getItem('pj_autohide') === '1') { HIDE = true; localStorage.setItem('pj_hide', '1'); }
   }
 
   /* jendela Keamanan */
   E('secBtn').onclick = () => {
     const f = E('fSec'); f.reset(); E('secMsg').textContent = '';
-    f.elements.autohide.checked = localStorage.getItem('pj_autohide') !== '0';
+    f.elements.autohide.checked = localStorage.getItem('pj_autohide') === '1';
     f.elements.idle.value = String(idleMin());
     E('mSec').showModal();
   };

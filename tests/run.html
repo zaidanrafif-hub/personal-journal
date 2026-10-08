@@ -1,0 +1,6 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><title>Uji penyimpanan</title>
+<style>body{font:15px system-ui;max-width:640px;margin:30px auto;padding:0 16px}li{margin:6px 0}.ok{color:#018786}.gagal{color:#B00020;font-weight:600}</style></head>
+<body><h2>Uji lapisan penyimpanan</h2><p>Hanya memakai akun uji <code>__uji__</code>. Data aplikasimu tidak disentuh.</p><ul id="r"></ul><p id="s"></p>
+<script src="../store.js"></script><script src="store.test.js"></script>
+<script>const h=window.__hasil;document.getElementById('r').innerHTML=h.map(x=>`<li class="${x.ok?'ok':'gagal'}">${x.ok?'LULUS':'GAGAL'} — ${x.nama} ${x.info}</li>`).join('');
+const g=h.filter(x=>!x.ok).length;document.getElementById('s').textContent=g?g+' pengujian gagal.':'Semua '+h.length+' pengujian lulus.';</script></body></html>
