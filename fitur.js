@@ -3,7 +3,7 @@
    zakat/sedekah, cadangan data, dan impor mutasi bank (CSV). */
 const Fit = (() => {
   const MOOD = { 5: 'Senang', 4: 'Tenang', 3: 'Biasa', 2: 'Capek', 1: 'Stres / sedih' };
-  const ensure = () => { D.goals ||= []; D.rec ||= []; D.journal ||= []; D.gold ||= 0; D.imported ||= {}; };
+  const ensure = () => { D.goals ||= []; D.rec ||= []; D.journal ||= []; D.gold ||= 0; D.imported ||= {}; D.profile ||= { name: '' }; };
   const ym = (y, m) => y + '-' + String(m).padStart(2, '0');
   const nextMonth = s => { let [y, m] = s.split('-').map(Number); m++; if (m > 12) { m = 1; y++; } return ym(y, m); };
   const prevMonth = s => { let [y, m] = s.split('-').map(Number); m--; if (m < 1) { m = 12; y--; } return ym(y, m); };

@@ -22,6 +22,15 @@
     const pre = Store.list(U).find(b => b.kind === 'pre');
     check('cadangan lama masih berformat asli (tanpa versi)', JSON.parse(localStorage.getItem(pre.key)).v === undefined);
 
+    // 2b. data v1 dimigrasi ke versi terbaru (menambah profil)
+    wipe(); put({ v: 1, wallets: [], tx: [], budgets: {}, inv: {}, goals: [], rec: [], journal: [], gold: 0, imported: {} });
+    d = Store.load(U);
+    check('data v1 dimigrasi ke v' + Store.SCHEMA + ' dengan profil', d.v === Store.SCHEMA && d.profile && d.profile.name === '' && baks('pre') === 1);
+
+    // 2c. kait onSaved dipanggil saat menyimpan
+    let hit = 0; Store.onSaved = () => { hit++; }; Store.save(U, d); Store.onSaved = null;
+    check('onSaved dipanggil sekali per penyimpanan', hit === 1);
+
     // 3. data versi terbaru tidak migrasi ulang
     Store.load(U); check('data sudah v' + Store.SCHEMA + ' tidak membuat cadangan "pre" baru', baks('pre') === 1);
 

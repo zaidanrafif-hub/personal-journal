@@ -54,7 +54,7 @@
     <div class="logo sm">Personal Journal</div>
     <nav>
       <a href="#home">Beranda</a><a href="#dompet">Dompet</a><a href="#anggaran">Anggaran</a><a href="#laporan">Laporan</a>
-      <a href="#investasi">Investasi</a><a href="#target">Target</a><a href="#tagihan">Tagihan</a><a href="#jurnal">Jurnal</a><a href="#zakat">Zakat</a><a href="#cadangan">Cadangan</a><a href="#catatan">Catatan</a><a href="#evaluasi">Evaluasi</a>
+      <a href="#investasi">Investasi</a><a href="#target">Target</a><a href="#tagihan">Tagihan</a><a href="#jurnal">Jurnal</a><a href="#zakat">Zakat</a><a href="#profil">Akun</a><a href="#cadangan">Cadangan</a><a href="#catatan">Catatan</a><a href="#evaluasi">Evaluasi</a>
     </nav>
     <div class="who"><span id="whoName"></span><button class="btn ghost" id="secBtn">Keamanan</button><button class="btn ghost" id="logout">Keluar</button></div>
   </header>
@@ -163,6 +163,23 @@
       <div class="card-h"><h2>Zakat &amp; sedekah</h2></div>
       <form id="fGold" class="jr"><label>Harga emas per gram (Rp)<input name="gold" type="number" min="0" inputmode="numeric"></label><button class="btn ghost">Hitung</button></form>
       <div id="zk"></div>
+    </section>
+
+    <section class="card" id="profil">
+      <div class="card-h"><h2>Akun</h2></div>
+      <form id="fProf" class="jr">
+        <label>Nama tampilan<input name="name" maxlength="30" placeholder="Nama yang muncul di sapaan"></label>
+        <p class="muted" style="margin:0">Akun: <span id="profAcc"></span></p>
+        <button class="btn primary">Simpan nama</button>
+      </form>
+      <div class="acts"><button class="btn ghost" id="profSec" type="button">Keamanan</button><button class="btn ghost" id="profOut" type="button">Keluar</button></div>
+    </section>
+
+    <section class="card" id="syncCard">
+      <div class="card-h"><h2>Sinkronisasi</h2></div>
+      <p id="syncState" style="margin:0 0 8px"></p>
+      <p class="muted" id="syncHelp" style="margin:0 0 10px">Untuk membuka data yang sama di HP dan laptop, aktifkan cloud (lihat PANDUAN-CLOUD.md).</p>
+      <button class="btn ghost" id="syncNow" type="button">Sinkronkan sekarang</button>
     </section>
 
     <section id="cadangan" class="card full">
@@ -301,9 +318,12 @@
 
 <div id="toast" class="toast" role="status"></div>
 <script src="store.js"></script>
+<script src="config.js"></script>
+<script src="cloud.js"></script>
 <script src="keamanan.js"></script>
 <script src="app.js"></script>
 <script src="fitur.js"></script>
 <script src="home.js"></script>
+<script src="profil.js"></script>
 </body>
 </html>

@@ -47,12 +47,12 @@ async function auth() {
 }
 $('#authBtn').onclick = auth;
 ['#u', '#p'].forEach(s => $(s).addEventListener('keydown', e => e.key === 'Enter' && auth()));
-$('#logout').onclick = () => { sessionStorage.removeItem('pj_session'); location.reload(); };
+$('#logout').onclick = () => { Cloud.signOut(); sessionStorage.removeItem('pj_session'); location.reload(); };
 
 function start(u) {
   user = u; D = load();
   $('#auth').hidden = true; $('#app').hidden = false; $('#whoName').textContent = u;
-  Sec.onLogin(); Sec.watch();
+  Sec.onLogin(); Sec.watch(); Cloud.attach(u);
   eyeLbl(); fillMonths(); render();
 }
 
@@ -260,4 +260,8 @@ document.addEventListener('click', e => {
 });
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 
-const s = sessionStorage.getItem('pj_session'); if (s && users()[s]) start(s);
+const s = sessionStorage.getItem('pj_session');
+if (Cloud.enabled) {
+  if (s && Cloud.hasSession()) start(s);
+  else Cloud.resume().then(em => { if (em) { sessionStorage.setItem('pj_session', em); start(em); } });
+} else if (s && users()[s]) start(s);

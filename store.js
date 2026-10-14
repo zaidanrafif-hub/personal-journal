@@ -2,7 +2,7 @@
 /* Lapisan penyimpanan: nomor versi skema, migrasi aman, dan cadangan otomatis.
    Aturan: data pengguna TIDAK PERNAH ditimpa jika migrasi gagal atau datanya lebih baru. */
 const Store = (() => {
-  const SCHEMA = 1;
+  const SCHEMA = 2;
   const uid = () => Math.random().toString(36).slice(2, 9);
   const dayStr = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
   const DKEY = u => 'pj_data_' + u;
@@ -20,13 +20,14 @@ const Store = (() => {
       { id: uid(), name: 'GoPay', type: 'giral', balance: 0 },
       { id: uid(), name: 'ShopeePay', type: 'giral', balance: 0 }],
     tx: [], budgets: {}, inv: { dana: 0, emas: 0, obligasi: 0, saham: 0 },
-    goals: [], rec: [], journal: [], gold: 0, imported: {}
+    goals: [], rec: [], journal: [], gold: 0, imported: {}, profile: { name: '' }
   });
 
   /* Daftar migrasi: kunci = versi asal, fungsi mengubah data ke versi berikutnya.
      Tahap berikutnya (ledger) menambahkan migrasi 1 -> 2 di sini. */
   const MIGRATIONS = {
-    0: d => { d.goals ||= []; d.rec ||= []; d.journal ||= []; d.gold ||= 0; d.imported ||= {}; return d; }
+    0: d => { d.goals ||= []; d.rec ||= []; d.journal ||= []; d.gold ||= 0; d.imported ||= {}; return d; },
+    1: d => { d.profile ||= { name: '' }; return d; }
   };
 
   /* ----- cadangan otomatis ----- */
@@ -98,8 +99,10 @@ const Store = (() => {
   function save(u, d) {
     if (locked) return false;
     d.v = SCHEMA;
-    try { localStorage.setItem(DKEY(u), JSON.stringify(d)); return true; }
+    try { localStorage.setItem(DKEY(u), JSON.stringify(d)); }
     catch (e) { api.onWarn('Penyimpanan penuh atau diblokir browser. Perubahan terakhir mungkin tidak tersimpan. Unduh cadangan sekarang.'); return false; }
+    if (api.onSaved) api.onSaved(u, d);
+    return true;
   }
   function restore(u, key) {
     const raw = localStorage.getItem(key); if (!raw) throw new Error('cadangan tidak ditemukan');

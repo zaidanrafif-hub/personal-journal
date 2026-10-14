@@ -69,7 +69,7 @@ const Home = (() => {
     const s = state();
     const h = new Date().getHours();
     $('#greet').textContent = h < 11 ? 'Selamat pagi' : h < 15 ? 'Selamat siang' : h < 18 ? 'Selamat sore' : 'Selamat malam';
-    $('#hName').textContent = user;
+    $('#hName').textContent = (D.profile && D.profile.name) || user;
     const al = alerts(), nb = $('#notifCount'); nb.textContent = al.length; nb.hidden = !al.length;
 
     // ringkasan keuangan: setiap angka berdiri sendiri
@@ -122,7 +122,7 @@ const Home = (() => {
   $('#qaTf').onclick = () => $('#addTf').click();
   $('#qaGoal').onclick = () => $('#addGoal').click();
   $('#bnPlus').onclick = () => openTx('out');
-  $('#bnProfil').onclick = () => $('#secBtn').click();
+  $('#bnProfil').onclick = () => $('#profil').scrollIntoView({ behavior: 'smooth' });
   const toAnalisis = () => { $('#evaluasi').scrollIntoView({ behavior: 'smooth' }); };
   $('#aiBtn').onclick = toAnalisis; $('#askBtn').onclick = toAnalisis;
   $('#notifBtn').onclick = () => {

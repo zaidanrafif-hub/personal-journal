@@ -37,6 +37,7 @@ const Sec = (() => {
   }
 
   async function login(u, pw) {
+    if (Cloud.enabled) return Cloud.login(u, pw);
     const w = waitSec(u);
     if (w) return { msg: 'Terlalu banyak percobaan. Coba lagi dalam ' + w + ' detik.' };
     const all = getUsers(), rec = all[u];
@@ -46,6 +47,7 @@ const Sec = (() => {
     return { ok: true };
   }
   async function register(u, pw) {
+    if (Cloud.enabled) return Cloud.signup(u, pw);
     if (!/^[a-z0-9._-]{3,20}$/.test(u)) return { msg: 'Nama akun 3-20 karakter: huruf kecil, angka, titik, strip.' };
     if (pw.length < 6) return { msg: 'Kata sandi minimal 6 karakter.' };
     const all = getUsers();
@@ -57,7 +59,7 @@ const Sec = (() => {
   /* keluar otomatis saat tidak aktif */
   let timer, watching = false;
   const idleMin = () => +(localStorage.getItem('pj_idle') ?? '5');
-  function out() { sessionStorage.removeItem('pj_session'); location.reload(); }
+  function out() { Cloud.signOut(); sessionStorage.removeItem('pj_session'); location.reload(); }
   function bump() { clearTimeout(timer); const m = idleMin(); if (m > 0 && cur()) timer = setTimeout(out, m * 60000); }
   function watch() {
     if (watching) return; watching = true;
@@ -84,9 +86,14 @@ const Sec = (() => {
       if (f.elements.n1.value.length < 6) return msg('Sandi baru minimal 6 karakter.');
       if (f.elements.n1.value !== f.elements.n2.value) return msg('Ulangi sandi baru dengan sama persis.');
       try {
-        const all = getUsers();
-        if (!(await check(u, f.elements.old.value, all[u]))) return msg('Sandi lama salah.');
-        all[u] = await make(f.elements.n1.value); setUsers(all);
+        if (Cloud.enabled) {
+          const r = await Cloud.changePassword(f.elements.old.value, f.elements.n1.value);
+          if (!r.ok) return msg(r.msg);
+        } else {
+          const all = getUsers();
+          if (!(await check(u, f.elements.old.value, all[u]))) return msg('Sandi lama salah.');
+          all[u] = await make(f.elements.n1.value); setUsers(all);
+        }
       } catch (x) { return msg('Gagal: ' + x.message); }
     }
     localStorage.setItem('pj_autohide', f.elements.autohide.checked ? '1' : '0');
