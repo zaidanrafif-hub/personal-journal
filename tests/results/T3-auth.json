@@ -1,0 +1,135 @@
+{
+ "stage": "T3-auth",
+ "at": "2026-11-22T04:08:39.745Z",
+ "pass": 25,
+ "fail": 0,
+ "notTested": 0,
+ "blocked": 0,
+ "results": [
+  {
+   "name": "/admin dimuat lewat cleanUrls (tanpa .html)",
+   "status": "PASS",
+   "ms": 136
+  },
+  {
+   "name": "/admin.html dialihkan ke /admin",
+   "status": "PASS",
+   "ms": 93
+  },
+  {
+   "name": "halaman login punya meta noindex",
+   "status": "PASS",
+   "ms": 24
+  },
+  {
+   "name": "tidak ada form pendaftaran admin",
+   "status": "PASS",
+   "ms": 16
+  },
+  {
+   "name": "kredensial salah -> pesan galat, tetap di login",
+   "status": "PASS",
+   "ms": 88
+  },
+  {
+   "name": "user biasa (bukan admin) ditolak + dicatat",
+   "status": "PASS",
+   "ms": 381
+  },
+  {
+   "name": "super admin pertama kali: diminta mendaftar 2FA (QR + kunci)",
+   "status": "PASS",
+   "ms": 337
+  },
+  {
+   "name": "kode 2FA salah ditolak",
+   "status": "PASS",
+   "ms": 70
+  },
+  {
+   "name": "kode 2FA benar -> masuk dasbor (aal2)",
+   "status": "PASS",
+   "ms": 147
+  },
+  {
+   "name": "login tercatat di audit (login.ok)",
+   "status": "PASS",
+   "ms": 53
+  },
+  {
+   "name": "menu menampilkan Ringkasan",
+   "status": "PASS",
+   "ms": 18
+  },
+  {
+   "name": "statistik tampil dan benar (6 pengguna)",
+   "status": "PASS",
+   "ms": 186
+  },
+  {
+   "name": "layar ringkasan: tak ada isi privat pengguna",
+   "status": "PASS",
+   "ms": 2
+  },
+  {
+   "name": "refresh halaman: sesi tetap (tanpa 2FA ulang)",
+   "status": "PASS",
+   "ms": 150
+  },
+  {
+   "name": "keluar -> kembali ke login dan sesi dihapus",
+   "status": "PASS",
+   "ms": 232
+  },
+  {
+   "name": "login ulang: kini diminta kode (bukan daftar), kode benar masuk",
+   "status": "PASS",
+   "ms": 403
+  },
+  {
+   "name": "tanpa halaman crash/galat JS",
+   "status": "PASS",
+   "ms": 0
+  },
+  {
+   "name": "editor: login+2FA, menu hanya sesuai izin (tanpa Peran/Audit)",
+   "status": "PASS",
+   "ms": 442
+  },
+  {
+   "name": "editor membuka #/roles lewat URL -> dialihkan, bukan membuka halaman peran",
+   "status": "PASS",
+   "ms": 445
+  },
+  {
+   "name": "RPC terlarang dari sesi editor ditolak database (403)",
+   "status": "PASS",
+   "ms": 40
+  },
+  {
+   "name": "editor tidak bisa membaca audit_logs langsung (REST)",
+   "status": "PASS",
+   "ms": 38
+  },
+  {
+   "name": "sesi aal1 (sebelum 2FA) tidak memberi izin apa pun",
+   "status": "PASS",
+   "ms": 370
+  },
+  {
+   "name": "sesi kedaluwarsa -> ditolak, kembali ke login",
+   "status": "PASS",
+   "ms": 74
+  },
+  {
+   "name": "keluar otomatis saat tidak aktif (idle) bekerja",
+   "status": "PASS",
+   "ms": 574
+  },
+  {
+   "name": "data jurnal pengguna tidak pernah diminta oleh admin (tak ada panggilan ke journal_data)",
+   "status": "PASS",
+   "ms": 4
+  }
+ ]
+}

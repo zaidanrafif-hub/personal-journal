@@ -1,0 +1,180 @@
+{
+ "stage": "T4-modules-manage",
+ "at": "2026-11-22T04:08:49.554Z",
+ "pass": 34,
+ "fail": 0,
+ "notTested": 0,
+ "blocked": 0,
+ "results": [
+  {
+   "name": "Pengguna: daftar 6 akun, hanya metadata",
+   "status": "PASS",
+   "ms": 158
+  },
+  {
+   "name": "Pengguna: pencarian email",
+   "status": "PASS",
+   "ms": 736
+  },
+  {
+   "name": "Pengguna: nonaktifkan lalu aktifkan akun (dengan konfirmasi) + tercatat audit",
+   "status": "PASS",
+   "ms": 457
+  },
+  {
+   "name": "Pengguna: Super Admin dilindungi (tanpa tombol nonaktifkan)",
+   "status": "PASS",
+   "ms": 40
+  },
+  {
+   "name": "Pengguna: ekspor CSV berisi email, tanpa data pribadi",
+   "status": "PASS",
+   "ms": 79
+  },
+  {
+   "name": "Pengguna: ekspor XLSX valid (dibaca ulang)",
+   "status": "PASS",
+   "ms": 120
+  },
+  {
+   "name": "Peran: daftar anggota admin",
+   "status": "PASS",
+   "ms": 98
+  },
+  {
+   "name": "Peran: beri lalu cabut peran editor",
+   "status": "PASS",
+   "ms": 372
+  },
+  {
+   "name": "Peran: email tidak terdaftar ditolak dengan pesan",
+   "status": "PASS",
+   "ms": 126
+  },
+  {
+   "name": "Peran: Super Admin butuh ketik konfirmasi",
+   "status": "PASS",
+   "ms": 143
+  },
+  {
+   "name": "Peran: matriks izin bisa diubah, tersimpan di database",
+   "status": "PASS",
+   "ms": 243
+  },
+  {
+   "name": "Peran: izin sensitif tidak ada di matriks dan ditolak database",
+   "status": "PASS",
+   "ms": 41
+  },
+  {
+   "name": "Branding: simpan nama, warna, font",
+   "status": "PASS",
+   "ms": 213
+  },
+  {
+   "name": "Branding: warna tidak valid ditolak database",
+   "status": "PASS",
+   "ms": 159
+  },
+  {
+   "name": "Branding: URL logo non-https atau berisi skrip ditolak",
+   "status": "PASS",
+   "ms": 140
+  },
+  {
+   "name": "CMS: buat halaman draf (tidak terlihat publik)",
+   "status": "PASS",
+   "ms": 295
+  },
+  {
+   "name": "CMS: terbitkan -> terlihat publik tanpa login",
+   "status": "PASS",
+   "ms": 232
+  },
+  {
+   "name": "CMS: slug tidak valid ditolak",
+   "status": "PASS",
+   "ms": 168
+  },
+  {
+   "name": "CMS: isi HTML/skrip hanya tersimpan sebagai teks (tidak dieksekusi)",
+   "status": "PASS",
+   "ms": 230
+  },
+  {
+   "name": "CMS: hapus halaman (konfirmasi)",
+   "status": "PASS",
+   "ms": 172
+  },
+  {
+   "name": "Media: unggah PNG -> tampil dan dapat diakses publik",
+   "status": "PASS",
+   "ms": 304
+  },
+  {
+   "name": "Media: jenis berkas terlarang ditolak (teks/html/svg)",
+   "status": "PASS",
+   "ms": 174
+  },
+  {
+   "name": "Media: berkas >5MB ditolak",
+   "status": "PASS",
+   "ms": 685
+  },
+  {
+   "name": "Media: hapus (konfirmasi) menghapus berkas dan baris",
+   "status": "PASS",
+   "ms": 177
+  },
+  {
+   "name": "Media: Customer Service tidak punya modul Media (izin ditolak di database juga)",
+   "status": "PASS",
+   "ms": 674
+  },
+  {
+   "name": "Media: Editor boleh unggah (izin media.write) dan CMS",
+   "status": "PASS",
+   "ms": 758
+  },
+  {
+   "name": "Komunikasi: pesan pengguna tampil dan dibalas",
+   "status": "PASS",
+   "ms": 238
+  },
+  {
+   "name": "Komunikasi: pengguna hanya melihat pesan miliknya (RLS)",
+   "status": "PASS",
+   "ms": 250
+  },
+  {
+   "name": "Komunikasi: buat draf -> kirim; pengguna hanya melihat yang terkirim",
+   "status": "PASS",
+   "ms": 449
+  },
+  {
+   "name": "Komunikasi: banner pengumuman tersimpan",
+   "status": "PASS",
+   "ms": 261
+  },
+  {
+   "name": "Komunikasi: pengguna biasa tidak bisa mengirim pemberitahuan (RPC/REST ditolak)",
+   "status": "PASS",
+   "ms": 125
+  },
+  {
+   "name": "Audit: semua tindakan di atas tercatat",
+   "status": "PASS",
+   "ms": 31
+  },
+  {
+   "name": "Tanpa galat JS/CSP selama tes",
+   "status": "PASS",
+   "ms": 0
+  },
+  {
+   "name": "Privasi: admin tidak pernah membaca journal_data",
+   "status": "PASS",
+   "ms": 0
+  }
+ ]
+}

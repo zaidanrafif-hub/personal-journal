@@ -1,0 +1,1199 @@
+{
+  "stage": "T1",
+  "environment": "Postgres 16.15 asli + tiruan Supabase (bukan Supabase asli)",
+  "ran_at": "2026-11-22T04:08:34.193Z",
+  "pass": 238,
+  "fail": 0,
+  "results": [
+    {
+      "name": "persiapan: tiruan Supabase dimuat",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "persiapan: akun awal dibuat",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "persiapan: tabel journal_data + 4 kebijakan asli dimuat",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "001: berjalan di database bersih",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "001: aman diulang (idempotent)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "002: bucket media + kebijakan storage (di tiruan storage)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "002: aman diulang",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "900: ditolak selama email masih placeholder",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "900: ditolak jika email belum terdaftar",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "900: berhasil untuk email terdaftar",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "900: aman diulang",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "profil: akun lama di-backfill",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "profil: akun baru otomatis dapat profil (trigger)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: tidak bisa membaca user_roles",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: tidak bisa membaca audit_logs",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: tidak bisa membaca profiles",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: tidak bisa membaca role_permissions",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: tidak bisa membaca app_settings",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: tidak bisa membaca system_backups",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: tidak bisa membaca support_messages",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: tidak bisa membaca notifications",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: tidak bisa membaca media_assets",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: tidak bisa membaca journal_data",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: boleh membaca public_settings",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: hanya melihat halaman terbit",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: tidak bisa memanggil admin_list_users()",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: tidak bisa memanggil admin_user_stats()",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: tidak bisa memanggil my_admin_info()",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: tidak bisa memanggil log_admin_action('a.b')",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: tidak bisa memanggil admin_export_snapshot()",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: tulis langsung ditolak: insert into public.user_roles (user_id, ",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: tulis langsung ditolak: insert into public.audit_logs (action) v",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: tulis langsung ditolak: update public.public_settings set value=",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "pengguna biasa: my_admin_info kosong, bukan admin",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "pengguna biasa (aal2): admin_list_users ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "pengguna biasa: admin_user_stats ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "pengguna biasa: admin_export_snapshot ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "pengguna biasa: tidak bisa memberi dirinya Super Admin (fungsi)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "pengguna biasa: tidak bisa insert user_roles langsung",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "pengguna biasa: tidak bisa menulis audit_logs",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "pengguna biasa: tidak bisa mengubah public_settings",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "pengguna biasa: tidak bisa mengubah status akunnya (profiles)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "pengguna biasa: tidak bisa menulis content_pages",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "pengguna biasa: hanya melihat profilnya sendiri",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "pengguna biasa: log_admin_action ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "journal_data: pengguna A membaca barisnya sendiri",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "journal_data: pengguna A tidak melihat baris B",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "journal_data: Super Admin (aal2) TIDAK bisa membaca journal_data",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Super Admin tanpa 2FA (aal1): admin_list_users ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Super Admin tanpa 2FA: my_admin_info tetap menjawab (supaya UI tahu perlu TOTP)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Super Admin tanpa 2FA: tulis pengaturan ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Super Admin (aal2): admin_list_users berhasil, 6 akun",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "admin_list_users: hanya kolom metadata (tanpa isi data)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "admin_list_users: kolom hanya metadata",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "admin_list_users: tidak membocorkan isi keuangan/jurnal",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "admin_list_users: jumlah revisi dan ukuran data benar",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "admin_list_users: pencarian email",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "admin_list_users: pencarian tidak bisa disuntik SQL",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "admin_list_users: karakter % di pencarian diperlakukan harfiah",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "admin_list_users: batas halaman",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "statistik: total 6, with_data 2",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "statistik: pengguna aktif 7 hari = 4 (owner, cs, userA, userB; editor 20 hari lalu)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "statistik: penggunaan fitur hanya jumlah pengguna",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "statistik: tidak ada nominal/isi catatan",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "statistik: grafik pendaftaran 30 hari",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Editor: bisa menulis halaman CMS",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Editor: tidak bisa melihat daftar pengguna",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Editor: tidak bisa mengubah maintenance",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Editor: tidak bisa membaca audit_logs",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Editor: tidak bisa memberi peran",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Editor: tidak bisa membuat catatan notifikasi",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Editor: bisa memakai admin_user_stats (overview.read)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Customer Service: bisa melihat daftar pengguna",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Customer Service: tidak bisa menulis halaman CMS",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Customer Service: tidak bisa mengubah status pengguna",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Customer Service: bisa membuat dan mengirim pengumuman",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "pengguna biasa: hanya melihat notifikasi yang sudah terkirim",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "dukungan: pengguna mengirim pesan sendiri",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "dukungan: tidak bisa mengirim atas nama orang lain",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "dukungan: tidak bisa menyisipkan balasan sendiri",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "dukungan: B tidak melihat pesan A",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "dukungan: Customer Service membaca semua pesan",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "dukungan: Customer Service membalas",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "dukungan: pengguna melihat balasan",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "dukungan: pengguna tidak bisa mengubah balasan/status",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Super Admin: tidak bisa mendelegasikan izin roles.write",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Super Admin: tidak bisa mendelegasikan audit.read",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Super Admin: izin tidak dikenal ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Super Admin: bisa memberi Editor izin users.read",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Editor kini bisa melihat daftar pengguna (izin diterapkan)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Super Admin: bisa mencabut izin lagi",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Editor kembali ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Super Admin terakhir tidak bisa dicabut",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "grant peran: email tak terdaftar ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "grant peran: nama peran ngawur ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "grant peran: Super Admin memberi Editor ke userA",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "grant peran: userA kini admin (dengan 2FA)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "revoke peran: userA dicabut",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "status: tidak bisa menonaktifkan diri sendiri",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "status: nilai status ngawur ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "status: pengguna tak ada ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "status: Super Admin lain tidak bisa dinonaktifkan",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "status: Super Admin menonaktifkan userB",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "status: userB tercatat nonaktif",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "status: Editor yang dinonaktifkan kehilangan semua izin",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "audit: Super Admin bisa membaca log",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "audit: mencatat role.bootstrap, role.grant, user.status, halaman CMS",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "audit: log tidak bisa di-UPDATE (Super Admin aal2)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "audit: log tidak bisa di-DELETE (Super Admin aal2)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "audit: log tidak bisa di-INSERT langsung (Super Admin aal2)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "audit: log tidak bisa di-TRUNCATE",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "audit: log_admin_action oleh admin berhasil",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "audit: nama aksi tidak valid ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "audit: Customer Service tidak bisa membaca log",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "branding: nilai valid disimpan",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "branding: anon membaca perubahan",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "branding: warna bukan #RRGGBB ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "branding: warna berisi CSS injeksi ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "branding: font di luar daftar ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "branding: logo http (bukan https) ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "branding: logo javascript: ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "branding: logo https valid diterima",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "branding: favicon http ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "branding: nama kosong ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "branding: nama 41 karakter ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "branding: field tambahan dibuang (hanya 6 field tersimpan)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "pengaturan: kunci tak dikenal ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "maintenance: nyalakan",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "maintenance: anon membaca status",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "maintenance: pesan 301 karakter ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "maintenance: \"on\" bukan boolean ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "maintenance: matikan",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "pengumuman: Customer Service boleh, Editor tidak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "app_settings: Super Admin menyimpan, anon tidak bisa membaca",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "app_settings: nama kunci tidak valid ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "impor: 1 baru, 1 diperbarui, 2 galat dilaporkan per baris",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "impor: halaman terbit terlihat anon",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "impor: lebih dari 500 baris ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "impor: Editor (tanpa data.import) ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "impor: bukan array ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "snapshot: Super Admin bisa mengekspor",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "snapshot: TIDAK memuat data keuangan/jurnal pengguna",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "snapshot: memuat pengaturan, halaman, izin, metadata pengguna",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "snapshot: Editor tidak bisa mengekspor",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "restore: Super Admin memulihkan snapshot",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "restore: pengaturan kembali ke nilai snapshot",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "restore: tercatat di system_backups",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "restore: berkas bukan snapshot ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "restore: Editor ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "backup: catatan ekspor dicatat apa adanya",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "backup: Editor tidak bisa mencatat",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "003: berjalan dan aman diulang",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "003: pengguna aktif tetap membaca datanya",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "003: pengguna aktif tetap bisa menulis datanya",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "003: pengguna NONAKTIF (userB) tidak bisa membaca datanya",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "003: pengguna nonaktif tidak bisa menulis datanya",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "003: data userB tidak berubah",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "003: anon tetap tidak melihat data (tanpa galat fatal)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "003: aktifkan kembali userB, data terbaca lagi",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "004: berjalan dan aman diulang",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "004: 18 modul awal (11 aktif nyata, 7 rencana)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "004: modul rencana tidak aktif",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: boleh membaca app_modules dan published_config",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: tidak bisa membaca feature_requests",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: tidak bisa membaca config_versions",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "anon: tidak bisa membaca app_releases",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "pengguna biasa: tulis langsung ke app_modules ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "Super Admin: tulis langsung ke app_modules ditolak (harus lewat fungsi)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "constraint: enabled tanpa implemented ditolak oleh database",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "modul: mengaktifkan modul belum diimplementasikan ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "modul: Editor tidak bisa mengubah modul",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "modul: Super Admin menonaktifkan dompet",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "modul: publik melihat dompet nonaktif",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "modul: mengaktifkan kembali dompet (data tidak hilang)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "modul: definisi baru selalu tidak aktif dan belum diimplementasikan",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "modul: admin tidak bisa mengubah flag implemented lewat update",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "modul: ikon di luar daftar ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "modul: ID tidak valid ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "modul: urutan dapat diubah",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "fitur: Super Admin membuat ide fitur (status idea)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "fitur: status awal idea",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "fitur: prioritas ngawur ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "fitur: planned boleh tanpa modul",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "fitur: ready tanpa modul terkait ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "fitur: terkait modul belum diimplementasikan, active ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "fitur: terkait modul nyata tetapi nonaktif, active ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "fitur: modul nyata dan aktif, status active diterima",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "fitur: fitur aktif tidak bisa dihapus",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "fitur: dinonaktifkan lalu dihapus",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "fitur: Customer Service tidak bisa menulis",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "tema: radius 99 ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "tema: warna latar berisi CSS injeksi ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "tema: gaya kartu tak dikenal ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "tema: fontScale 3 ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "beranda: widget tak dikenal ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "beranda: widget ganda ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "beranda: judul 61 karakter ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "menu: modul belum diimplementasikan ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "menu: ikon di luar daftar ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "menu: label 21 karakter ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "kunci konfigurasi tak dikenal ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "draft: Editor boleh menyimpan draft tema (layout.write)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "draft: field tambahan dibuang saat disimpan",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "draft: pengguna biasa dan anon tidak bisa menyimpan",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "draft: belum terlihat publik sebelum terbit",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "terbit: Editor tidak boleh menerbitkan",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "terbit: Super Admin tanpa 2FA ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "terbit: tanpa draft ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "terbit: Super Admin menerbitkan tema v1",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "terbit: anon membaca konfigurasi terbit",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "terbit: draft sudah tidak ada",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "terbit: tercatat sebagai rilis konfigurasi otomatis",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "draft kedua -> terbit v2 -> v1 diarsipkan",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "rollback: ke versi yang sedang berlaku ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "rollback: versi tidak ada ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "rollback: Editor ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "rollback: ke v1 membuat v3 berisi data v1",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "rollback: riwayat lengkap (v3 terbit, v2 dan v1 arsip)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "riwayat: mencatat siapa yang mengubah (v1 oleh Editor, v2 dan v3 oleh Super Admin)",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "riwayat: pengguna biasa ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "beranda: simpan, terbit, anon membaca urutan widget",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "menu: simpan menu valid dan terbit",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "draft: bisa dibuang",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "draft: tidak bisa ada dua draft untuk kunci yang sama",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "integritas: dua versi terbit untuk satu kunci ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "rilis: Super Admin mencatat rilis kode",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "rilis: jenis ngawur ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "rilis: Customer Service tidak boleh mencatat",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "rilis: Super Admin membaca riwayat rilis",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "keamanan: pengguna biasa tercatat login.denied",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "keamanan: dibatasi 1 catatan per 60 detik per akun",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "keamanan: pengguna biasa tidak bisa mengaku login.ok",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "keamanan: admin aal2 mencatat login.ok",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "keamanan: anon ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "keamanan: hasil ngawur ditolak",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "audit: konfigurasi dan modul tercatat",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "journal_data: tetap tidak terbaca admin setelah semua migrasi",
+      "status": "PASS",
+      "info": ""
+    },
+    {
+      "name": "journal_data: pengguna tetap membaca dan menulis datanya sendiri",
+      "status": "PASS",
+      "info": ""
+    }
+  ]
+}

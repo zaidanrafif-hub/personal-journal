@@ -1,0 +1,185 @@
+{
+ "stage": "T5-modules-system",
+ "at": "2026-11-22T04:09:01.415Z",
+ "pass": 35,
+ "fail": 0,
+ "notTested": 0,
+ "blocked": 0,
+ "results": [
+  {
+   "name": "Analitik: angka agregat benar (6 pengguna, 1 pemakai transaksi dan jurnal)",
+   "status": "PASS",
+   "ms": 148
+  },
+  {
+   "name": "Analitik: tidak membocorkan isi/nominal pengguna",
+   "status": "PASS",
+   "ms": 4
+  },
+  {
+   "name": "Pengaturan: simpan pengaturan internal (JSON) + audit",
+   "status": "PASS",
+   "ms": 279
+  },
+  {
+   "name": "Pengaturan: JSON rusak dan nama kunci tidak valid ditolak",
+   "status": "PASS",
+   "ms": 191
+  },
+  {
+   "name": "Pengaturan: batas keluar otomatis tersimpan di browser ini",
+   "status": "PASS",
+   "ms": 80
+  },
+  {
+   "name": "Pengaturan: Customer Service tidak punya akses (menu hilang, database menolak)",
+   "status": "PASS",
+   "ms": 543
+  },
+  {
+   "name": "Keamanan: daftar periksa, 2FA aktif, tombol atur ulang",
+   "status": "PASS",
+   "ms": 116
+  },
+  {
+   "name": "Keamanan: percobaan ditolak tampil (dari tes akun non-admin)",
+   "status": "PASS",
+   "ms": 660
+  },
+  {
+   "name": "Keamanan: editor tidak punya modul Keamanan/Audit/Backup",
+   "status": "PASS",
+   "ms": 527
+  },
+  {
+   "name": "Audit: daftar tampil, filter aksi bekerja",
+   "status": "PASS",
+   "ms": 1216
+  },
+  {
+   "name": "Audit: ekspor CSV",
+   "status": "PASS",
+   "ms": 67
+  },
+  {
+   "name": "Audit: tidak bisa diubah/dihapus walau lewat API langsung (append-only)",
+   "status": "PASS",
+   "ms": 213
+  },
+  {
+   "name": "Audit: Customer Service tidak bisa membaca (kosong/ditolak)",
+   "status": "PASS",
+   "ms": 538
+  },
+  {
+   "name": "Backup: ekspor snapshot JSON valid, TANPA data jurnal pengguna",
+   "status": "PASS",
+   "ms": 159
+  },
+  {
+   "name": "Backup: riwayat mencatat ekspor",
+   "status": "PASS",
+   "ms": 35
+  },
+  {
+   "name": "Backup: pulihkan dari berkas (konfirmasi ketik PULIHKAN) mengembalikan branding",
+   "status": "PASS",
+   "ms": 261
+  },
+  {
+   "name": "Backup: berkas bukan snapshot ditolak",
+   "status": "PASS",
+   "ms": 155
+  },
+  {
+   "name": "Backup: data jurnal pengguna tidak berubah oleh pemulihan",
+   "status": "PASS",
+   "ms": 94
+  },
+  {
+   "name": "Backup: Editor tidak bisa memanggil pemulihan (RPC ditolak)",
+   "status": "PASS",
+   "ms": 639
+  },
+  {
+   "name": "Impor: templat CSV dapat diunduh",
+   "status": "PASS",
+   "ms": 46
+  },
+  {
+   "name": "Impor CSV: 3 baris, 1 tidak valid -> 2 dibuat, galat dilaporkan per baris",
+   "status": "PASS",
+   "ms": 286
+  },
+  {
+   "name": "Impor: baris sama diulang memperbarui (bukan menggandakan)",
+   "status": "PASS",
+   "ms": 233
+  },
+  {
+   "name": "Impor: kolom wajib hilang -> pesan jelas, tidak ada yang disimpan",
+   "status": "PASS",
+   "ms": 69
+  },
+  {
+   "name": "Impor: lebih dari 500 baris ditolak",
+   "status": "PASS",
+   "ms": 67
+  },
+  {
+   "name": "Impor/ekspor XLSX: bolak-balik utuh (termasuk koma, kutip, baris baru, unicode)",
+   "status": "PASS",
+   "ms": 7
+  },
+  {
+   "name": "Impor XLSX lewat antarmuka",
+   "status": "PASS",
+   "ms": 271
+  },
+  {
+   "name": "XLSX rusak/bukan zip ditolak dengan pesan (tidak crash)",
+   "status": "PASS",
+   "ms": 79
+  },
+  {
+   "name": "Keamanan ekspor: sel berawalan rumus dinetralkan (CSV dan XLSX)",
+   "status": "PASS",
+   "ms": 218
+  },
+  {
+   "name": "Impor: Customer Service tidak punya izin (RPC ditolak)",
+   "status": "PASS",
+   "ms": 549
+  },
+  {
+   "name": "Maintenance: aktifkan (konfirmasi) -> pengguna melihat layar perawatan",
+   "status": "PASS",
+   "ms": 787
+  },
+  {
+   "name": "Maintenance: admin tetap bisa dibuka saat aktif",
+   "status": "PASS",
+   "ms": 150
+  },
+  {
+   "name": "Maintenance: matikan -> aplikasi normal lagi",
+   "status": "PASS",
+   "ms": 978
+  },
+  {
+   "name": "Maintenance: Editor/CS tidak punya akses (RPC ditolak)",
+   "status": "PASS",
+   "ms": 629
+  },
+  {
+   "name": "Tanpa galat JS/CSP selama tes",
+   "status": "PASS",
+   "ms": 0
+  },
+  {
+   "name": "Privasi: tak ada akses journal_data dari admin",
+   "status": "PASS",
+   "ms": 1
+  }
+ ]
+}

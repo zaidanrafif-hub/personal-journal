@@ -1,0 +1,428 @@
+# Laporan Uji Admin Dashboard
+
+Dibuat otomatis dari `tests/results/*.json`. **Catatan:** semua tes memakai Postgres lokal + tiruan Supabase, bukan Supabase/Vercel milikmu.
+
+| Tahap | Lulus | Gagal | Belum diuji | Terhalang |
+|---|---|---|---|---|
+| T1 Database (RLS, peran, izin, audit, migrasi) — Postgres 16 asli + simulasi Supabase | 238 | 0 | 0 | 0 |
+| T3 Login, 2FA, sesi, akses menu — browser + gateway tiruan | 25 | 0 | 0 | 0 |
+| T4 Pengguna, Peran, Branding, Konten, Media, Komunikasi | 34 | 0 | 0 | 0 |
+| T5 Analitik, Pengaturan, Keamanan, Audit, Backup, Impor/Ekspor, Maintenance | 35 | 0 | 0 | 0 |
+| T6 Modul, Feature Builder, Aplikasi, Editor Tampilan (draft/terbit/rollback) | 36 | 0 | 0 | 0 |
+| T7 Regresi aplikasi lama, service worker, header, responsif, gelap, aksesibilitas | 26 | 0 | 0 | 0 |
+| **Total** | **394** | **0** | | |
+
+
+## TIDAK diuji / perlu kamu
+- Supabase milikmu (jalankan SQL, coba login)
+- TOTP asli dengan aplikasi autentikator
+- Kebijakan Storage asli
+- Header di Vercel asli
+- Deploy dan push ke GitHub
+- Efek migrasi 003 pada Supabase asli (diuji hanya di Postgres lokal)
+
+## T1 Database (RLS, peran, izin, audit, migrasi) — Postgres 16 asli + simulasi Supabase
+- PASS: persiapan: tiruan Supabase dimuat
+- PASS: persiapan: akun awal dibuat
+- PASS: persiapan: tabel journal_data + 4 kebijakan asli dimuat
+- PASS: 001: berjalan di database bersih
+- PASS: 001: aman diulang (idempotent)
+- PASS: 002: bucket media + kebijakan storage (di tiruan storage)
+- PASS: 002: aman diulang
+- PASS: 900: ditolak selama email masih placeholder
+- PASS: 900: ditolak jika email belum terdaftar
+- PASS: 900: berhasil untuk email terdaftar
+- PASS: 900: aman diulang
+- PASS: profil: akun lama di-backfill
+- PASS: profil: akun baru otomatis dapat profil (trigger)
+- PASS: anon: tidak bisa membaca user_roles
+- PASS: anon: tidak bisa membaca audit_logs
+- PASS: anon: tidak bisa membaca profiles
+- PASS: anon: tidak bisa membaca role_permissions
+- PASS: anon: tidak bisa membaca app_settings
+- PASS: anon: tidak bisa membaca system_backups
+- PASS: anon: tidak bisa membaca support_messages
+- PASS: anon: tidak bisa membaca notifications
+- PASS: anon: tidak bisa membaca media_assets
+- PASS: anon: tidak bisa membaca journal_data
+- PASS: anon: boleh membaca public_settings
+- PASS: anon: hanya melihat halaman terbit
+- PASS: anon: tidak bisa memanggil admin_list_users()
+- PASS: anon: tidak bisa memanggil admin_user_stats()
+- PASS: anon: tidak bisa memanggil my_admin_info()
+- PASS: anon: tidak bisa memanggil log_admin_action('a.b')
+- PASS: anon: tidak bisa memanggil admin_export_snapshot()
+- PASS: anon: tulis langsung ditolak: insert into public.user_roles (user_id, 
+- PASS: anon: tulis langsung ditolak: insert into public.audit_logs (action) v
+- PASS: anon: tulis langsung ditolak: update public.public_settings set value=
+- PASS: pengguna biasa: my_admin_info kosong, bukan admin
+- PASS: pengguna biasa (aal2): admin_list_users ditolak
+- PASS: pengguna biasa: admin_user_stats ditolak
+- PASS: pengguna biasa: admin_export_snapshot ditolak
+- PASS: pengguna biasa: tidak bisa memberi dirinya Super Admin (fungsi)
+- PASS: pengguna biasa: tidak bisa insert user_roles langsung
+- PASS: pengguna biasa: tidak bisa menulis audit_logs
+- PASS: pengguna biasa: tidak bisa mengubah public_settings
+- PASS: pengguna biasa: tidak bisa mengubah status akunnya (profiles)
+- PASS: pengguna biasa: tidak bisa menulis content_pages
+- PASS: pengguna biasa: hanya melihat profilnya sendiri
+- PASS: pengguna biasa: log_admin_action ditolak
+- PASS: journal_data: pengguna A membaca barisnya sendiri
+- PASS: journal_data: pengguna A tidak melihat baris B
+- PASS: journal_data: Super Admin (aal2) TIDAK bisa membaca journal_data
+- PASS: Super Admin tanpa 2FA (aal1): admin_list_users ditolak
+- PASS: Super Admin tanpa 2FA: my_admin_info tetap menjawab (supaya UI tahu perlu TOTP)
+- PASS: Super Admin tanpa 2FA: tulis pengaturan ditolak
+- PASS: Super Admin (aal2): admin_list_users berhasil, 6 akun
+- PASS: admin_list_users: hanya kolom metadata (tanpa isi data)
+- PASS: admin_list_users: kolom hanya metadata
+- PASS: admin_list_users: tidak membocorkan isi keuangan/jurnal
+- PASS: admin_list_users: jumlah revisi dan ukuran data benar
+- PASS: admin_list_users: pencarian email
+- PASS: admin_list_users: pencarian tidak bisa disuntik SQL
+- PASS: admin_list_users: karakter % di pencarian diperlakukan harfiah
+- PASS: admin_list_users: batas halaman
+- PASS: statistik: total 6, with_data 2
+- PASS: statistik: pengguna aktif 7 hari = 4 (owner, cs, userA, userB; editor 20 hari lalu)
+- PASS: statistik: penggunaan fitur hanya jumlah pengguna
+- PASS: statistik: tidak ada nominal/isi catatan
+- PASS: statistik: grafik pendaftaran 30 hari
+- PASS: Editor: bisa menulis halaman CMS
+- PASS: Editor: tidak bisa melihat daftar pengguna
+- PASS: Editor: tidak bisa mengubah maintenance
+- PASS: Editor: tidak bisa membaca audit_logs
+- PASS: Editor: tidak bisa memberi peran
+- PASS: Editor: tidak bisa membuat catatan notifikasi
+- PASS: Editor: bisa memakai admin_user_stats (overview.read)
+- PASS: Customer Service: bisa melihat daftar pengguna
+- PASS: Customer Service: tidak bisa menulis halaman CMS
+- PASS: Customer Service: tidak bisa mengubah status pengguna
+- PASS: Customer Service: bisa membuat dan mengirim pengumuman
+- PASS: pengguna biasa: hanya melihat notifikasi yang sudah terkirim
+- PASS: dukungan: pengguna mengirim pesan sendiri
+- PASS: dukungan: tidak bisa mengirim atas nama orang lain
+- PASS: dukungan: tidak bisa menyisipkan balasan sendiri
+- PASS: dukungan: B tidak melihat pesan A
+- PASS: dukungan: Customer Service membaca semua pesan
+- PASS: dukungan: Customer Service membalas
+- PASS: dukungan: pengguna melihat balasan
+- PASS: dukungan: pengguna tidak bisa mengubah balasan/status
+- PASS: Super Admin: tidak bisa mendelegasikan izin roles.write
+- PASS: Super Admin: tidak bisa mendelegasikan audit.read
+- PASS: Super Admin: izin tidak dikenal ditolak
+- PASS: Super Admin: bisa memberi Editor izin users.read
+- PASS: Editor kini bisa melihat daftar pengguna (izin diterapkan)
+- PASS: Super Admin: bisa mencabut izin lagi
+- PASS: Editor kembali ditolak
+- PASS: Super Admin terakhir tidak bisa dicabut
+- PASS: grant peran: email tak terdaftar ditolak
+- PASS: grant peran: nama peran ngawur ditolak
+- PASS: grant peran: Super Admin memberi Editor ke userA
+- PASS: grant peran: userA kini admin (dengan 2FA)
+- PASS: revoke peran: userA dicabut
+- PASS: status: tidak bisa menonaktifkan diri sendiri
+- PASS: status: nilai status ngawur ditolak
+- PASS: status: pengguna tak ada ditolak
+- PASS: status: Super Admin lain tidak bisa dinonaktifkan
+- PASS: status: Super Admin menonaktifkan userB
+- PASS: status: userB tercatat nonaktif
+- PASS: status: Editor yang dinonaktifkan kehilangan semua izin
+- PASS: audit: Super Admin bisa membaca log
+- PASS: audit: mencatat role.bootstrap, role.grant, user.status, halaman CMS
+- PASS: audit: log tidak bisa di-UPDATE (Super Admin aal2)
+- PASS: audit: log tidak bisa di-DELETE (Super Admin aal2)
+- PASS: audit: log tidak bisa di-INSERT langsung (Super Admin aal2)
+- PASS: audit: log tidak bisa di-TRUNCATE
+- PASS: audit: log_admin_action oleh admin berhasil
+- PASS: audit: nama aksi tidak valid ditolak
+- PASS: audit: Customer Service tidak bisa membaca log
+- PASS: branding: nilai valid disimpan
+- PASS: branding: anon membaca perubahan
+- PASS: branding: warna bukan #RRGGBB ditolak
+- PASS: branding: warna berisi CSS injeksi ditolak
+- PASS: branding: font di luar daftar ditolak
+- PASS: branding: logo http (bukan https) ditolak
+- PASS: branding: logo javascript: ditolak
+- PASS: branding: logo https valid diterima
+- PASS: branding: favicon http ditolak
+- PASS: branding: nama kosong ditolak
+- PASS: branding: nama 41 karakter ditolak
+- PASS: branding: field tambahan dibuang (hanya 6 field tersimpan)
+- PASS: pengaturan: kunci tak dikenal ditolak
+- PASS: maintenance: nyalakan
+- PASS: maintenance: anon membaca status
+- PASS: maintenance: pesan 301 karakter ditolak
+- PASS: maintenance: "on" bukan boolean ditolak
+- PASS: maintenance: matikan
+- PASS: pengumuman: Customer Service boleh, Editor tidak
+- PASS: app_settings: Super Admin menyimpan, anon tidak bisa membaca
+- PASS: app_settings: nama kunci tidak valid ditolak
+- PASS: impor: 1 baru, 1 diperbarui, 2 galat dilaporkan per baris
+- PASS: impor: halaman terbit terlihat anon
+- PASS: impor: lebih dari 500 baris ditolak
+- PASS: impor: Editor (tanpa data.import) ditolak
+- PASS: impor: bukan array ditolak
+- PASS: snapshot: Super Admin bisa mengekspor
+- PASS: snapshot: TIDAK memuat data keuangan/jurnal pengguna
+- PASS: snapshot: memuat pengaturan, halaman, izin, metadata pengguna
+- PASS: snapshot: Editor tidak bisa mengekspor
+- PASS: restore: Super Admin memulihkan snapshot
+- PASS: restore: pengaturan kembali ke nilai snapshot
+- PASS: restore: tercatat di system_backups
+- PASS: restore: berkas bukan snapshot ditolak
+- PASS: restore: Editor ditolak
+- PASS: backup: catatan ekspor dicatat apa adanya
+- PASS: backup: Editor tidak bisa mencatat
+- PASS: 003: berjalan dan aman diulang
+- PASS: 003: pengguna aktif tetap membaca datanya
+- PASS: 003: pengguna aktif tetap bisa menulis datanya
+- PASS: 003: pengguna NONAKTIF (userB) tidak bisa membaca datanya
+- PASS: 003: pengguna nonaktif tidak bisa menulis datanya
+- PASS: 003: data userB tidak berubah
+- PASS: 003: anon tetap tidak melihat data (tanpa galat fatal)
+- PASS: 003: aktifkan kembali userB, data terbaca lagi
+- PASS: 004: berjalan dan aman diulang
+- PASS: 004: 18 modul awal (11 aktif nyata, 7 rencana)
+- PASS: 004: modul rencana tidak aktif
+- PASS: anon: boleh membaca app_modules dan published_config
+- PASS: anon: tidak bisa membaca feature_requests
+- PASS: anon: tidak bisa membaca config_versions
+- PASS: anon: tidak bisa membaca app_releases
+- PASS: pengguna biasa: tulis langsung ke app_modules ditolak
+- PASS: Super Admin: tulis langsung ke app_modules ditolak (harus lewat fungsi)
+- PASS: constraint: enabled tanpa implemented ditolak oleh database
+- PASS: modul: mengaktifkan modul belum diimplementasikan ditolak
+- PASS: modul: Editor tidak bisa mengubah modul
+- PASS: modul: Super Admin menonaktifkan dompet
+- PASS: modul: publik melihat dompet nonaktif
+- PASS: modul: mengaktifkan kembali dompet (data tidak hilang)
+- PASS: modul: definisi baru selalu tidak aktif dan belum diimplementasikan
+- PASS: modul: admin tidak bisa mengubah flag implemented lewat update
+- PASS: modul: ikon di luar daftar ditolak
+- PASS: modul: ID tidak valid ditolak
+- PASS: modul: urutan dapat diubah
+- PASS: fitur: Super Admin membuat ide fitur (status idea)
+- PASS: fitur: status awal idea
+- PASS: fitur: prioritas ngawur ditolak
+- PASS: fitur: planned boleh tanpa modul
+- PASS: fitur: ready tanpa modul terkait ditolak
+- PASS: fitur: terkait modul belum diimplementasikan, active ditolak
+- PASS: fitur: terkait modul nyata tetapi nonaktif, active ditolak
+- PASS: fitur: modul nyata dan aktif, status active diterima
+- PASS: fitur: fitur aktif tidak bisa dihapus
+- PASS: fitur: dinonaktifkan lalu dihapus
+- PASS: fitur: Customer Service tidak bisa menulis
+- PASS: tema: radius 99 ditolak
+- PASS: tema: warna latar berisi CSS injeksi ditolak
+- PASS: tema: gaya kartu tak dikenal ditolak
+- PASS: tema: fontScale 3 ditolak
+- PASS: beranda: widget tak dikenal ditolak
+- PASS: beranda: widget ganda ditolak
+- PASS: beranda: judul 61 karakter ditolak
+- PASS: menu: modul belum diimplementasikan ditolak
+- PASS: menu: ikon di luar daftar ditolak
+- PASS: menu: label 21 karakter ditolak
+- PASS: kunci konfigurasi tak dikenal ditolak
+- PASS: draft: Editor boleh menyimpan draft tema (layout.write)
+- PASS: draft: field tambahan dibuang saat disimpan
+- PASS: draft: pengguna biasa dan anon tidak bisa menyimpan
+- PASS: draft: belum terlihat publik sebelum terbit
+- PASS: terbit: Editor tidak boleh menerbitkan
+- PASS: terbit: Super Admin tanpa 2FA ditolak
+- PASS: terbit: tanpa draft ditolak
+- PASS: terbit: Super Admin menerbitkan tema v1
+- PASS: terbit: anon membaca konfigurasi terbit
+- PASS: terbit: draft sudah tidak ada
+- PASS: terbit: tercatat sebagai rilis konfigurasi otomatis
+- PASS: draft kedua -> terbit v2 -> v1 diarsipkan
+- PASS: rollback: ke versi yang sedang berlaku ditolak
+- PASS: rollback: versi tidak ada ditolak
+- PASS: rollback: Editor ditolak
+- PASS: rollback: ke v1 membuat v3 berisi data v1
+- PASS: rollback: riwayat lengkap (v3 terbit, v2 dan v1 arsip)
+- PASS: riwayat: mencatat siapa yang mengubah (v1 oleh Editor, v2 dan v3 oleh Super Admin)
+- PASS: riwayat: pengguna biasa ditolak
+- PASS: beranda: simpan, terbit, anon membaca urutan widget
+- PASS: menu: simpan menu valid dan terbit
+- PASS: draft: bisa dibuang
+- PASS: draft: tidak bisa ada dua draft untuk kunci yang sama
+- PASS: integritas: dua versi terbit untuk satu kunci ditolak
+- PASS: rilis: Super Admin mencatat rilis kode
+- PASS: rilis: jenis ngawur ditolak
+- PASS: rilis: Customer Service tidak boleh mencatat
+- PASS: rilis: Super Admin membaca riwayat rilis
+- PASS: keamanan: pengguna biasa tercatat login.denied
+- PASS: keamanan: dibatasi 1 catatan per 60 detik per akun
+- PASS: keamanan: pengguna biasa tidak bisa mengaku login.ok
+- PASS: keamanan: admin aal2 mencatat login.ok
+- PASS: keamanan: anon ditolak
+- PASS: keamanan: hasil ngawur ditolak
+- PASS: audit: konfigurasi dan modul tercatat
+- PASS: journal_data: tetap tidak terbaca admin setelah semua migrasi
+- PASS: journal_data: pengguna tetap membaca dan menulis datanya sendiri
+
+## T3 Login, 2FA, sesi, akses menu — browser + gateway tiruan
+- PASS: /admin dimuat lewat cleanUrls (tanpa .html)
+- PASS: /admin.html dialihkan ke /admin
+- PASS: halaman login punya meta noindex
+- PASS: tidak ada form pendaftaran admin
+- PASS: kredensial salah -> pesan galat, tetap di login
+- PASS: user biasa (bukan admin) ditolak + dicatat
+- PASS: super admin pertama kali: diminta mendaftar 2FA (QR + kunci)
+- PASS: kode 2FA salah ditolak
+- PASS: kode 2FA benar -> masuk dasbor (aal2)
+- PASS: login tercatat di audit (login.ok)
+- PASS: menu menampilkan Ringkasan
+- PASS: statistik tampil dan benar (6 pengguna)
+- PASS: layar ringkasan: tak ada isi privat pengguna
+- PASS: refresh halaman: sesi tetap (tanpa 2FA ulang)
+- PASS: keluar -> kembali ke login dan sesi dihapus
+- PASS: login ulang: kini diminta kode (bukan daftar), kode benar masuk
+- PASS: tanpa halaman crash/galat JS
+- PASS: editor: login+2FA, menu hanya sesuai izin (tanpa Peran/Audit)
+- PASS: editor membuka #/roles lewat URL -> dialihkan, bukan membuka halaman peran
+- PASS: RPC terlarang dari sesi editor ditolak database (403)
+- PASS: editor tidak bisa membaca audit_logs langsung (REST)
+- PASS: sesi aal1 (sebelum 2FA) tidak memberi izin apa pun
+- PASS: sesi kedaluwarsa -> ditolak, kembali ke login
+- PASS: keluar otomatis saat tidak aktif (idle) bekerja
+- PASS: data jurnal pengguna tidak pernah diminta oleh admin (tak ada panggilan ke journal_data)
+
+## T4 Pengguna, Peran, Branding, Konten, Media, Komunikasi
+- PASS: Pengguna: daftar 6 akun, hanya metadata
+- PASS: Pengguna: pencarian email
+- PASS: Pengguna: nonaktifkan lalu aktifkan akun (dengan konfirmasi) + tercatat audit
+- PASS: Pengguna: Super Admin dilindungi (tanpa tombol nonaktifkan)
+- PASS: Pengguna: ekspor CSV berisi email, tanpa data pribadi
+- PASS: Pengguna: ekspor XLSX valid (dibaca ulang)
+- PASS: Peran: daftar anggota admin
+- PASS: Peran: beri lalu cabut peran editor
+- PASS: Peran: email tidak terdaftar ditolak dengan pesan
+- PASS: Peran: Super Admin butuh ketik konfirmasi
+- PASS: Peran: matriks izin bisa diubah, tersimpan di database
+- PASS: Peran: izin sensitif tidak ada di matriks dan ditolak database
+- PASS: Branding: simpan nama, warna, font
+- PASS: Branding: warna tidak valid ditolak database
+- PASS: Branding: URL logo non-https atau berisi skrip ditolak
+- PASS: CMS: buat halaman draf (tidak terlihat publik)
+- PASS: CMS: terbitkan -> terlihat publik tanpa login
+- PASS: CMS: slug tidak valid ditolak
+- PASS: CMS: isi HTML/skrip hanya tersimpan sebagai teks (tidak dieksekusi)
+- PASS: CMS: hapus halaman (konfirmasi)
+- PASS: Media: unggah PNG -> tampil dan dapat diakses publik
+- PASS: Media: jenis berkas terlarang ditolak (teks/html/svg)
+- PASS: Media: berkas >5MB ditolak
+- PASS: Media: hapus (konfirmasi) menghapus berkas dan baris
+- PASS: Media: Customer Service tidak punya modul Media (izin ditolak di database juga)
+- PASS: Media: Editor boleh unggah (izin media.write) dan CMS
+- PASS: Komunikasi: pesan pengguna tampil dan dibalas
+- PASS: Komunikasi: pengguna hanya melihat pesan miliknya (RLS)
+- PASS: Komunikasi: buat draf -> kirim; pengguna hanya melihat yang terkirim
+- PASS: Komunikasi: banner pengumuman tersimpan
+- PASS: Komunikasi: pengguna biasa tidak bisa mengirim pemberitahuan (RPC/REST ditolak)
+- PASS: Audit: semua tindakan di atas tercatat
+- PASS: Tanpa galat JS/CSP selama tes
+- PASS: Privasi: admin tidak pernah membaca journal_data
+
+## T5 Analitik, Pengaturan, Keamanan, Audit, Backup, Impor/Ekspor, Maintenance
+- PASS: Analitik: angka agregat benar (6 pengguna, 1 pemakai transaksi dan jurnal)
+- PASS: Analitik: tidak membocorkan isi/nominal pengguna
+- PASS: Pengaturan: simpan pengaturan internal (JSON) + audit
+- PASS: Pengaturan: JSON rusak dan nama kunci tidak valid ditolak
+- PASS: Pengaturan: batas keluar otomatis tersimpan di browser ini
+- PASS: Pengaturan: Customer Service tidak punya akses (menu hilang, database menolak)
+- PASS: Keamanan: daftar periksa, 2FA aktif, tombol atur ulang
+- PASS: Keamanan: percobaan ditolak tampil (dari tes akun non-admin)
+- PASS: Keamanan: editor tidak punya modul Keamanan/Audit/Backup
+- PASS: Audit: daftar tampil, filter aksi bekerja
+- PASS: Audit: ekspor CSV
+- PASS: Audit: tidak bisa diubah/dihapus walau lewat API langsung (append-only)
+- PASS: Audit: Customer Service tidak bisa membaca (kosong/ditolak)
+- PASS: Backup: ekspor snapshot JSON valid, TANPA data jurnal pengguna
+- PASS: Backup: riwayat mencatat ekspor
+- PASS: Backup: pulihkan dari berkas (konfirmasi ketik PULIHKAN) mengembalikan branding
+- PASS: Backup: berkas bukan snapshot ditolak
+- PASS: Backup: data jurnal pengguna tidak berubah oleh pemulihan
+- PASS: Backup: Editor tidak bisa memanggil pemulihan (RPC ditolak)
+- PASS: Impor: templat CSV dapat diunduh
+- PASS: Impor CSV: 3 baris, 1 tidak valid -> 2 dibuat, galat dilaporkan per baris
+- PASS: Impor: baris sama diulang memperbarui (bukan menggandakan)
+- PASS: Impor: kolom wajib hilang -> pesan jelas, tidak ada yang disimpan
+- PASS: Impor: lebih dari 500 baris ditolak
+- PASS: Impor/ekspor XLSX: bolak-balik utuh (termasuk koma, kutip, baris baru, unicode)
+- PASS: Impor XLSX lewat antarmuka
+- PASS: XLSX rusak/bukan zip ditolak dengan pesan (tidak crash)
+- PASS: Keamanan ekspor: sel berawalan rumus dinetralkan (CSV dan XLSX)
+- PASS: Impor: Customer Service tidak punya izin (RPC ditolak)
+- PASS: Maintenance: aktifkan (konfirmasi) -> pengguna melihat layar perawatan
+- PASS: Maintenance: admin tetap bisa dibuka saat aktif
+- PASS: Maintenance: matikan -> aplikasi normal lagi
+- PASS: Maintenance: Editor/CS tidak punya akses (RPC ditolak)
+- PASS: Tanpa galat JS/CSP selama tes
+- PASS: Privasi: tak ada akses journal_data dari admin
+
+## T6 Modul, Feature Builder, Aplikasi, Editor Tampilan (draft/terbit/rollback)
+- PASS: Modul: 18 modul terdaftar; modul rencana tidak bisa diaktifkan (tombol nonaktif)
+- PASS: Modul: database menolak mengaktifkan modul belum ada walau API dipanggil langsung
+- PASS: Modul: nonaktifkan Zakat -> menu dan bagian Zakat hilang di aplikasi pengguna, aktifkan -> kembali
+- PASS: Modul: urutan dapat diubah (naik/turun) dan tersimpan
+- PASS: Modul: tambah modul rencana baru -> berstatus Belum ada
+- PASS: Modul: ID tidak valid ditolak
+- PASS: Modul: Editor boleh melihat tapi tidak mengubah
+- PASS: Feature: buat fitur baru (status Ide)
+- PASS: Feature: status "Siap/Aktif" ditolak jika tidak ada modul berkode
+- PASS: Feature: dikaitkan ke modul rencana (belum ada kode) tetap tidak bisa Siap
+- PASS: Feature: dikaitkan ke modul berkode (Tagihan) -> Siap dan Aktif berhasil
+- PASS: Feature: fitur aktif tidak bisa dihapus; setelah dinonaktifkan baru bisa (konfirmasi)
+- PASS: Aplikasi: ringkasan modul + tiga jenis pembaruan + catat rilis
+- PASS: Editor: halaman termuat dengan pratinjau (iframe) dan 3 tab
+- PASS: Editor: pratinjau langsung berubah saat radius digeser (belum disimpan)
+- PASS: Editor: pratinjau tidak mengubah aplikasi pengguna yang asli
+- PASS: Editor: pratinjau memakai data contoh, bukan data pengguna, dan tidak menulis
+- PASS: Editor: tombol ukuran perangkat mengubah lebar pratinjau
+- PASS: Editor: simpan draft -> tersimpan di database tapi BELUM terlihat pengguna
+- PASS: Editor: Bandingkan menampilkan perubahan radius
+- PASS: Editor: nilai di luar batas ditolak database (radius 99)
+- PASS: Editor: konfigurasi bebas/skrip ditolak (mode "<script>")
+- PASS: Editor: terbitkan (konfirmasi) -> berlaku untuk pengguna, tercatat rilis
+- PASS: Editor: tema ber-cache -> aplikasi tetap bertema saat server mati (fail-safe/offline)
+- PASS: Editor Beranda: ubah sapaan, sembunyikan Target, urutan Insight naik; simpan dan terbitkan
+- PASS: Aplikasi pengguna menerapkan Beranda: sapaan, sambutan, kartu Target tersembunyi, Insight pertama
+- PASS: Editor Menu: ganti label, sembunyikan Jurnal, pindahkan Laporan ke depan; terbitkan
+- PASS: Aplikasi pengguna menerapkan Menu: label baru, Jurnal tersembunyi, urutan
+- PASS: Riwayat: menampilkan versi; rollback tema ke versi sebelumnya membuat versi baru yang berlaku
+- PASS: Rollback tercermin di aplikasi pengguna
+- PASS: Buang draft: perubahan belum disimpan dibuang, yang terbit tidak berubah
+- PASS: Editor (peran) bisa simpan draft tapi TIDAK bisa menerbitkan (UI dan database)
+- PASS: Customer Service tidak punya Editor Tampilan, Modul tersedia hanya-baca
+- PASS: Pengguna biasa tidak bisa memanggil fungsi admin apa pun (RPC platform)
+- PASS: Pengguna biasa tidak bisa menulis published_config/app_modules langsung
+- PASS: Tanpa galat JS/CSP selama tes
+
+## T7 Regresi aplikasi lama, service worker, header, responsif, gelap, aksesibilitas
+- PASS: Regresi: 16 uji lapisan penyimpanan (store.test.js) tetap lulus
+- PASS: Aplikasi pengguna: halaman masuk muncul, tanpa galat JS
+- PASS: Aplikasi pengguna: masuk dengan akun cloud lama, data dari cloud termuat
+- PASS: Aplikasi pengguna: tambah transaksi tersinkron ke cloud (rev naik), data lama tidak tertimpa
+- PASS: Aplikasi pengguna: dialog Keamanan dan keluar tetap berfungsi
+- PASS: Aplikasi pengguna: pendaftaran akun baru tetap berfungsi
+- PASS: Aplikasi pengguna: tanpa galat JS selama alur
+- PASS: Pengguna baru TIDAK mendapat akses admin (halaman admin menolak)
+- PASS: Service worker: aktif untuk aplikasi, platform.js ikut di-cache, /admin TIDAK pernah di-cache
+- PASS: Header /admin: noindex, tidak bisa di-frame, CSP ketat, no-store
+- PASS: Header /admin/*.js juga memakai CSP dan noindex
+- PASS: Header aplikasi pengguna: SAMEORIGIN (pratinjau admin), nosniff, tanpa CSP yang merusak font/gaya lama
+- PASS: /admin.html dialihkan ke /admin (cleanUrls)
+- PASS: Berkas non-publik (tests, supabase, cloud) tidak disajikan (meniru .vercelignore)
+- PASS: Tidak ada catch-all rewrite: rute acak 404 (bukan index.html)
+- PASS: Semua JS admin lolos CSP: tidak ada pelanggaran di semua 18 modul
+- PASS: Responsif desktop: semua 18 modul tanpa gulir horizontal halaman
+- PASS: Responsif tablet: semua 18 modul tanpa gulir horizontal halaman
+- PASS: Responsif mobile: semua 18 modul tanpa gulir horizontal halaman
+- PASS: Ponsel: menu samping tertutup bawaan, bisa dibuka lewat tombol dan menutup setelah memilih
+- PASS: Desktop: tombol menu melipat sidebar (collapse)
+- PASS: Mode gelap: halaman admin terbaca (kontras teks/latar cukup) + tangkapan layar
+- PASS: Kontras mode terang >= 4.5 untuk teks utama dan teks redup
+- PASS: Aksesibilitas: tombol dan isian di semua modul punya nama (teks/aria-label/label)
+- PASS: Aksesibilitas: dialog ditutup dengan Escape dan fokus bisa dijangkau keyboard di login
+- PASS: Aksesibilitas: halaman punya landmark main/nav/header dan lang="id"

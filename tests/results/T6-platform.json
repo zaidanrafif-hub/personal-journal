@@ -1,0 +1,190 @@
+{
+ "stage": "T6-platform",
+ "at": "2026-11-22T04:09:22.894Z",
+ "pass": 36,
+ "fail": 0,
+ "notTested": 0,
+ "blocked": 0,
+ "results": [
+  {
+   "name": "Modul: 18 modul terdaftar; modul rencana tidak bisa diaktifkan (tombol nonaktif)",
+   "status": "PASS",
+   "ms": 174
+  },
+  {
+   "name": "Modul: database menolak mengaktifkan modul belum ada walau API dipanggil langsung",
+   "status": "PASS",
+   "ms": 88
+  },
+  {
+   "name": "Modul: nonaktifkan Zakat -> menu dan bagian Zakat hilang di aplikasi pengguna, aktifkan -> kembali",
+   "status": "PASS",
+   "ms": 4465
+  },
+  {
+   "name": "Modul: urutan dapat diubah (naik/turun) dan tersimpan",
+   "status": "PASS",
+   "ms": 834
+  },
+  {
+   "name": "Modul: tambah modul rencana baru -> berstatus Belum ada",
+   "status": "PASS",
+   "ms": 220
+  },
+  {
+   "name": "Modul: ID tidak valid ditolak",
+   "status": "PASS",
+   "ms": 200
+  },
+  {
+   "name": "Modul: Editor boleh melihat tapi tidak mengubah",
+   "status": "PASS",
+   "ms": 664
+  },
+  {
+   "name": "Feature: buat fitur baru (status Ide)",
+   "status": "PASS",
+   "ms": 219
+  },
+  {
+   "name": "Feature: status \"Siap/Aktif\" ditolak jika tidak ada modul berkode",
+   "status": "PASS",
+   "ms": 214
+  },
+  {
+   "name": "Feature: dikaitkan ke modul rencana (belum ada kode) tetap tidak bisa Siap",
+   "status": "PASS",
+   "ms": 241
+  },
+  {
+   "name": "Feature: dikaitkan ke modul berkode (Tagihan) -> Siap dan Aktif berhasil",
+   "status": "PASS",
+   "ms": 364
+  },
+  {
+   "name": "Feature: fitur aktif tidak bisa dihapus; setelah dinonaktifkan baru bisa (konfirmasi)",
+   "status": "PASS",
+   "ms": 610
+  },
+  {
+   "name": "Aplikasi: ringkasan modul + tiga jenis pembaruan + catat rilis",
+   "status": "PASS",
+   "ms": 471
+  },
+  {
+   "name": "Editor: halaman termuat dengan pratinjau (iframe) dan 3 tab",
+   "status": "PASS",
+   "ms": 580
+  },
+  {
+   "name": "Editor: pratinjau langsung berubah saat radius digeser (belum disimpan)",
+   "status": "PASS",
+   "ms": 35
+  },
+  {
+   "name": "Editor: pratinjau tidak mengubah aplikasi pengguna yang asli",
+   "status": "PASS",
+   "ms": 407
+  },
+  {
+   "name": "Editor: pratinjau memakai data contoh, bukan data pengguna, dan tidak menulis",
+   "status": "PASS",
+   "ms": 12
+  },
+  {
+   "name": "Editor: tombol ukuran perangkat mengubah lebar pratinjau",
+   "status": "PASS",
+   "ms": 163
+  },
+  {
+   "name": "Editor: simpan draft -> tersimpan di database tapi BELUM terlihat pengguna",
+   "status": "PASS",
+   "ms": 610
+  },
+  {
+   "name": "Editor: Bandingkan menampilkan perubahan radius",
+   "status": "PASS",
+   "ms": 67
+  },
+  {
+   "name": "Editor: nilai di luar batas ditolak database (radius 99)",
+   "status": "PASS",
+   "ms": 42
+  },
+  {
+   "name": "Editor: konfigurasi bebas/skrip ditolak (mode \"<script>\")",
+   "status": "PASS",
+   "ms": 39
+  },
+  {
+   "name": "Editor: terbitkan (konfirmasi) -> berlaku untuk pengguna, tercatat rilis",
+   "status": "PASS",
+   "ms": 807
+  },
+  {
+   "name": "Editor: tema ber-cache -> aplikasi tetap bertema saat server mati (fail-safe/offline)",
+   "status": "PASS",
+   "ms": 1213
+  },
+  {
+   "name": "Editor Beranda: ubah sapaan, sembunyikan Target, urutan Insight naik; simpan dan terbitkan",
+   "status": "PASS",
+   "ms": 544
+  },
+  {
+   "name": "Aplikasi pengguna menerapkan Beranda: sapaan, sambutan, kartu Target tersembunyi, Insight pertama",
+   "status": "PASS",
+   "ms": 1203
+  },
+  {
+   "name": "Editor Menu: ganti label, sembunyikan Jurnal, pindahkan Laporan ke depan; terbitkan",
+   "status": "PASS",
+   "ms": 433
+  },
+  {
+   "name": "Aplikasi pengguna menerapkan Menu: label baru, Jurnal tersembunyi, urutan",
+   "status": "PASS",
+   "ms": 1153
+  },
+  {
+   "name": "Riwayat: menampilkan versi; rollback tema ke versi sebelumnya membuat versi baru yang berlaku",
+   "status": "PASS",
+   "ms": 656
+  },
+  {
+   "name": "Rollback tercermin di aplikasi pengguna",
+   "status": "PASS",
+   "ms": 455
+  },
+  {
+   "name": "Buang draft: perubahan belum disimpan dibuang, yang terbit tidak berubah",
+   "status": "PASS",
+   "ms": 126
+  },
+  {
+   "name": "Editor (peran) bisa simpan draft tapi TIDAK bisa menerbitkan (UI dan database)",
+   "status": "PASS",
+   "ms": 1592
+  },
+  {
+   "name": "Customer Service tidak punya Editor Tampilan, Modul tersedia hanya-baca",
+   "status": "PASS",
+   "ms": 595
+  },
+  {
+   "name": "Pengguna biasa tidak bisa memanggil fungsi admin apa pun (RPC platform)",
+   "status": "PASS",
+   "ms": 244
+  },
+  {
+   "name": "Pengguna biasa tidak bisa menulis published_config/app_modules langsung",
+   "status": "PASS",
+   "ms": 216
+  },
+  {
+   "name": "Tanpa galat JS/CSP selama tes",
+   "status": "PASS",
+   "ms": 0
+  }
+ ]
+}

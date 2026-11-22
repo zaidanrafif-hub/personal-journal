@@ -1,0 +1,140 @@
+{
+ "stage": "T7-integration",
+ "at": "2026-11-22T04:09:55.366Z",
+ "pass": 26,
+ "fail": 0,
+ "notTested": 0,
+ "blocked": 0,
+ "results": [
+  {
+   "name": "Regresi: 16 uji lapisan penyimpanan (store.test.js) tetap lulus",
+   "status": "PASS",
+   "ms": 110
+  },
+  {
+   "name": "Aplikasi pengguna: halaman masuk muncul, tanpa galat JS",
+   "status": "PASS",
+   "ms": 384
+  },
+  {
+   "name": "Aplikasi pengguna: masuk dengan akun cloud lama, data dari cloud termuat",
+   "status": "PASS",
+   "ms": 1082
+  },
+  {
+   "name": "Aplikasi pengguna: tambah transaksi tersinkron ke cloud (rev naik), data lama tidak tertimpa",
+   "status": "PASS",
+   "ms": 3100
+  },
+  {
+   "name": "Aplikasi pengguna: dialog Keamanan dan keluar tetap berfungsi",
+   "status": "PASS",
+   "ms": 174
+  },
+  {
+   "name": "Aplikasi pengguna: pendaftaran akun baru tetap berfungsi",
+   "status": "PASS",
+   "ms": 596
+  },
+  {
+   "name": "Aplikasi pengguna: tanpa galat JS selama alur",
+   "status": "PASS",
+   "ms": 0
+  },
+  {
+   "name": "Pengguna baru TIDAK mendapat akses admin (halaman admin menolak)",
+   "status": "PASS",
+   "ms": 513
+  },
+  {
+   "name": "Service worker: aktif untuk aplikasi, platform.js ikut di-cache, /admin TIDAK pernah di-cache",
+   "status": "PASS",
+   "ms": 1823
+  },
+  {
+   "name": "Header /admin: noindex, tidak bisa di-frame, CSP ketat, no-store",
+   "status": "PASS",
+   "ms": 2
+  },
+  {
+   "name": "Header /admin/*.js juga memakai CSP dan noindex",
+   "status": "PASS",
+   "ms": 2
+  },
+  {
+   "name": "Header aplikasi pengguna: SAMEORIGIN (pratinjau admin), nosniff, tanpa CSP yang merusak font/gaya lama",
+   "status": "PASS",
+   "ms": 2
+  },
+  {
+   "name": "/admin.html dialihkan ke /admin (cleanUrls)",
+   "status": "PASS",
+   "ms": 4
+  },
+  {
+   "name": "Berkas non-publik (tests, supabase, cloud) tidak disajikan (meniru .vercelignore)",
+   "status": "PASS",
+   "ms": 5
+  },
+  {
+   "name": "Tidak ada catch-all rewrite: rute acak 404 (bukan index.html)",
+   "status": "PASS",
+   "ms": 2
+  },
+  {
+   "name": "Semua JS admin lolos CSP: tidak ada pelanggaran di semua 18 modul",
+   "status": "PASS",
+   "ms": 1950
+  },
+  {
+   "name": "Responsif desktop: semua 18 modul tanpa gulir horizontal halaman",
+   "status": "PASS",
+   "ms": 4697
+  },
+  {
+   "name": "Responsif tablet: semua 18 modul tanpa gulir horizontal halaman",
+   "status": "PASS",
+   "ms": 4589
+  },
+  {
+   "name": "Responsif mobile: semua 18 modul tanpa gulir horizontal halaman",
+   "status": "PASS",
+   "ms": 4616
+  },
+  {
+   "name": "Ponsel: menu samping tertutup bawaan, bisa dibuka lewat tombol dan menutup setelah memilih",
+   "status": "PASS",
+   "ms": 1432
+  },
+  {
+   "name": "Desktop: tombol menu melipat sidebar (collapse)",
+   "status": "PASS",
+   "ms": 660
+  },
+  {
+   "name": "Mode gelap: halaman admin terbaca (kontras teks/latar cukup) + tangkapan layar",
+   "status": "PASS",
+   "ms": 618
+  },
+  {
+   "name": "Kontras mode terang >= 4.5 untuk teks utama dan teks redup",
+   "status": "PASS",
+   "ms": 551
+  },
+  {
+   "name": "Aksesibilitas: tombol dan isian di semua modul punya nama (teks/aria-label/label)",
+   "status": "PASS",
+   "ms": 3788
+  },
+  {
+   "name": "Aksesibilitas: dialog ditutup dengan Escape dan fokus bisa dijangkau keyboard di login",
+   "status": "PASS",
+   "ms": 177
+  },
+  {
+   "name": "Aksesibilitas: halaman punya landmark main/nav/header dan lang=\"id\"",
+   "status": "PASS",
+   "ms": 540
+  }
+ ]
+}
